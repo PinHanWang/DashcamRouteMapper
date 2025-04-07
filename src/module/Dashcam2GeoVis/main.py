@@ -1,9 +1,7 @@
 import os
 from pathlib import Path
-import pandas as pd
 import glob
-from utlis.makeExif import makeExifDf, saveExifCsv
-from video2geojson import Video2GeoJson
+from video2geojson import Video2GeoJson, PanoramaVideo2GeoJson
 from tqdm import tqdm
 import geojson
 import datetime
@@ -32,12 +30,23 @@ def convert_video_to_geojson(video_dir: Path, output_dir: Path):
 
     mp4_files = [Path(x) for x in glob.glob(f"{video_dir}/**/*.mp4", recursive=True)]
     
+
+    
     for mp4_file in tqdm(mp4_files, desc="Converting video information to geojson"):
-        try:
-            video2geojson = Video2GeoJson(mp4_file)
-            video2geojson.save_geojson(output_dir=output_dir)
-        except Exception as e:
-            print(f"Error processing in {mp4_file}: {e}")
+        
+        if os.path.exists(os.path.join(video_dir, mp4_file.stem + ".gpx")):
+            try:
+                pano2geojson = PanoramaVideo2GeoJson(mp4_file, os.path.join(video_dir, mp4_file.stem + ".gpx"))
+                pano2geojson.save_geojson(output_dir=output_dir)
+            except Exception as e:
+                print(f"Error processing in {mp4_file}: {e}")
+        else:
+            try:
+                video2geojson = Video2GeoJson(mp4_file)
+                video2geojson.save_geojson(output_dir=output_dir)
+            except Exception as e:
+                print(f"Error processing in {mp4_file}: {e}")
+                
     merge_all_geojson(outptut_dir)
 
 

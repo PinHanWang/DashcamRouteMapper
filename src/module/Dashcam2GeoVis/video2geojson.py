@@ -6,6 +6,7 @@ from datetime import datetime
 import os
 from geojson import Point, LineString, Feature, FeatureCollection
 from utlis.makeExif import makeExifDf, saveExifCsv
+from utlis.GPSProcessor import GPXProcessor
 import re
 
 
@@ -60,34 +61,52 @@ class Video2GeoJson:
 
 class PanoramaVideo2GeoJson:
     def __init__(self, video_path: Path, gpx_path: Path) -> None:
-        self.video_path = video_path
-        self.gpx_path = gpx_path
+        self.video_path = Path(video_path)
+        self.gpx_path = Path(gpx_path)
+        self.track_pts = GPXProcessor(gpx_path).read_gpx()
+        self.df = pd.DataFrame(self.track_pts)
 
+    def create_point_feature(self):
+        point_feartures = []
+        for _, row in self.df.iterrows():
+            point = Point((row["lon"], row["lat"]))
+            properties = {
+                "datetime": row["time"].strftime("%Y-%m-%d %H:%M:%S"),
+                "elevation": row["ele"],
+            }
+            point_feature = Feature(geometry=point, properties=properties)
+            point_feartures.append(point_feature)
 
-import subprocess
-import json
+        return point_feartures
+    
+    def create_line_feature(self):
+        line_coordinates = list(zip(self.df["lon"], self.df["lat"]))
+        line_properties = {
+            "filename": self.video_path.stem,
+            "starttime": self.df["time"].iloc[0].strftime("%Y-%m-%d %H:%M:%S"),
+            "endtime": self.df["time"].iloc[-1].strftime("%Y-%m-%d %H:%M:%S"),
+        }
 
-def read_exif(video_path):
-    try:
-        # 使用 exiftool 輸出 JSON 格式
-        result = subprocess.run(
-            ['exiftool', '-j', video_path],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            text=True
+        line_feature = Feature(geometry=LineString(
+            line_coordinates), properties=line_properties)
+
+        return line_feature
+    
+    def create_feature_collection(self):
+        point_features = self.create_point_feature()
+        line_feature = self.create_line_feature()
+
+        feature_collection = FeatureCollection(
+            features=[line_feature] + point_features
         )
 
-        if result.returncode != 0:
-            print("ExifTool 錯誤訊息：", result.stderr)
-            return None
-
-        # 將 JSON 字串轉換成 Python 字典
-        exif_data = json.loads(result.stdout)[0]
-        return exif_data
-
-    except Exception as e:
-        print("讀取 exif 發生錯誤：", e)
-        return None
+        return feature_collection
+    
+    def save_geojson(self, output_dir:Path):
+        feature_collection = self.create_feature_collection()
+        output_path = os.path.join(output_dir, f"{self.video_path.stem}.geojson")
+        with open(output_path, "w") as f:
+            geojson.dump(feature_collection, f, indent=2)
 
 
 
@@ -97,9 +116,9 @@ if __name__ == "__main__":
     
     video_path = os.path.join(folder, name)
 
-    exif_info = read_exif(video_path)
-    
-    if exif_info:
-        with open(os.path.join(folder, f"{name}_exif.json"), "w", encoding="utf-8") as f:
+    gpx_path = os.path.join(folder, "Guilin_Rd.gpx")
 
-            json.dump(exif_info, f, indent=4, ensure_ascii=False)
+    pano2geojson = PanoramaVideo2GeoJson(video_path, gpx_path)
+    pano2geojson.save_geojson(folder)
+    print(pano2geojson.df["time"].iloc[0])
+    print(type(pano2geojson.df["time"].iloc[0]))
