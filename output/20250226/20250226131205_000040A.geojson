@@ -1,0 +1,170 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.533789,
+            25.049942
+          ],
+          [
+            121.533789,
+            25.049942
+          ],
+          [
+            121.533789,
+            25.049942
+          ],
+          [
+            121.533789,
+            25.049942
+          ],
+          [
+            121.533789,
+            25.049939
+          ],
+          [
+            121.533789,
+            25.049939
+          ],
+          [
+            121.533789,
+            25.049936
+          ],
+          [
+            121.533789,
+            25.049936
+          ]
+        ]
+      },
+      "properties": {
+        "filename": "20250226131205_000040A",
+        "starttime": "2025-02-26 13:12:06",
+        "endtime": "2025-02-26 13:12:13"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.533789,
+          25.049942
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 13:12:06",
+        "speed": 0.0,
+        "azimuth": 20.4
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.533789,
+          25.049942
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 13:12:07",
+        "speed": 0.0,
+        "azimuth": 20.4
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.533789,
+          25.049942
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 13:12:08",
+        "speed": 0.0,
+        "azimuth": 20.4
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.533789,
+          25.049942
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 13:12:09",
+        "speed": 0.0,
+        "azimuth": 20.4
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.533789,
+          25.049939
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 13:12:10",
+        "speed": 0.0,
+        "azimuth": 20.4
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.533789,
+          25.049939
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 13:12:11",
+        "speed": 0.0,
+        "azimuth": 20.4
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.533789,
+          25.049936
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 13:12:12",
+        "speed": 0.0,
+        "azimuth": 20.4
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.533789,
+          25.049936
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 13:12:13",
+        "speed": 0.0,
+        "azimuth": 20.4
+      }
+    }
+  ]
+}

@@ -34,14 +34,14 @@ class GPXProcessor:
         except Exception as e:
             print(f"Error reading GPX file: {e}")
 
-    def interpolate_gpx(self, frequency = 2):
+    def interpolate_gpx(self, frequency=2):
 
         if frequency < 1:
             raise ValueError("Frequency must be at least 1")
 
         if len(self.track_pts) < 2:
             raise ValueError("Track points must be at least 2")
-        
+
         time = [pt['time'].timestamp() for pt in self.track_pts]
         lat = [pt['lat'] for pt in self.track_pts]
         lon = [pt['lon'] for pt in self.track_pts]
@@ -59,21 +59,20 @@ class GPXProcessor:
         new_lons = lon_interp(new_times)
         new_eles = ele_interp(new_times)
 
-        interpolated_points = [{'time': t, 'lat': l, 'lon': lon, 'ele': ele} 
-                            for t, l, lon, ele in zip(new_datetimes, new_lats, new_lons, new_eles)]
+        interpolated_points = [{'time': t, 'lat': l, 'lon': lon, 'ele': ele}
+                               for t, l, lon, ele in zip(new_datetimes, new_lats, new_lons, new_eles)]
 
         return interpolated_points
 
-    def draw_tracking(self, track_pts, output_file = None):
-        map = folium.Map(location=[track_pts[0]['lat'], track_pts[0]['lon']], zoom_start=12)
+    def draw_tracking(self, track_pts, output_file=None):
+        map = folium.Map(
+            location=[track_pts[0]['lat'], track_pts[0]['lon']], zoom_start=12)
 
         for point in track_pts:
-            folium.Marker(location=[point['lat'], point['lon']], popup=point['time']).add_to(map)
+            folium.Marker(
+                location=[point['lat'], point['lon']], popup=point['time']).add_to(map)
 
         map.save(output_file)
-
-
-
 
 
 if __name__ == "__main__":
@@ -85,13 +84,7 @@ if __name__ == "__main__":
     output_file = os.path.join(r'output', 'original_gpx_tracking.html')
     gpx_processor.draw_tracking(original_track_pts, output_file)
 
-
     interpolated_track_pts = gpx_processor.interpolate_gpx(3)
     print(f"Interpolated track points length: {len(interpolated_track_pts)}")
     output_file = os.path.join(r'output', 'interpolated_gpx_tracking.html')
     gpx_processor.draw_tracking(interpolated_track_pts, output_file)
-
-
-
-
-    

@@ -5,6 +5,7 @@ from pathlib import Path
 import pandas as pd
 from pyproj import Transformer
 
+
 def _getExifStartTime(p: Path) -> tuple[int, str]:
     """
         取得檔案的EXIF資訊並計算出影像的第一秒GPS時間
@@ -18,9 +19,17 @@ def _getExifStartTime(p: Path) -> tuple[int, str]:
         l = [x.split(": ")[1] for x in context.split("\n")]
         fps = float(l[0])
         createDate = datetime.strptime(l[1], "%Y:%m:%d %H:%M:%S")
-        duration = datetime.strptime(l[2], "%H:%M:%S")
-        startDate = createDate - timedelta(minutes = duration.minute, seconds = duration.second)
+        if 's' in l[2]:
+            duration = timedelta(seconds=int(
+                float(l[2].replace(" s", "").strip())))
+            startDate = createDate - duration
+        else:
+            duration = datetime.strptime(l[2], "%H:%M:%S")
+            startDate = createDate - \
+                timedelta(minutes=duration.minute, seconds=duration.second)
+
     return fps, startDate.strftime("%Y:%m:%d %H:%M:%S")
+
 
 def _getExifExtractEmbeddedData(p: Path) -> dict:
     """
@@ -38,18 +47,24 @@ def _getExifExtractEmbeddedData(p: Path) -> dict:
         result = role.findall(s)
         a, b, c = (float(x) for x in result)
         return d * (a + b/60 + c/3600)
-    
+
     data = {}
     cmd = f"exiftool -ee -T -GPS* {str(p)}"
     with os.popen(cmd) as t:
         context = t.read()[:-1]
         cells = context.split("\t")[:-1]
         data["GPSDateTime"] = [cells[i][:-1] for i in range(0, len(cells), 5)]
-        data["GPSLatitude"] = [_calculateGps(cells[i]) for i in range(1, len(cells), 5)]
-        data["GPSLongitude"] = [_calculateGps(cells[i]) for i in range(2, len(cells), 5)]
+        data["GPSLatitude"] = [_calculateGps(
+            cells[i]) for i in range(1, len(cells), 5)]
+        data["GPSLongitude"] = [_calculateGps(
+            cells[i]) for i in range(2, len(cells), 5)]
         data["GPSSpeed"] = [float(cells[i]) for i in range(3, len(cells), 5)]
         data["GPSTrack"] = [float(cells[i]) for i in range(4, len(cells), 5)]
+
+    if data == {}:
+        print(f"MP4 file: {p} has no GPS data")
     return data
+
 
 def _getDfSecondsDifference(startTime: str, dateTime: str) -> int:
     """
@@ -59,12 +74,15 @@ def _getDfSecondsDifference(startTime: str, dateTime: str) -> int:
     dateTime = datetime.strptime(dateTime, "%Y:%m:%d %H:%M:%S")
     return (dateTime - startTime).total_seconds()
 
+
 def _getDfTransGps(lon: float, lat: float) -> tuple[float, float]:
     """
         進一步處理EXIF的DataFrame ( 計算 lat3857, lon3857 )
     """
-    transformer = Transformer.from_crs("EPSG:4326", "EPSG:3857", always_xy = True)
+    transformer = Transformer.from_crs(
+        "EPSG:4326", "EPSG:3857", always_xy=True)
     return transformer.transform(lon, lat)
+
 
 def makeExifDf(p: Path, columns: list = []) -> pd.DataFrame:
     """
@@ -76,7 +94,7 @@ def makeExifDf(p: Path, columns: list = []) -> pd.DataFrame:
     data = _getExifExtractEmbeddedData(p)
     df = pd.DataFrame(data)
     df = df.rename(
-        columns = {
+        columns={
             "GPSDateTime": "datetime",
             "GPSLatitude": "lat",
             "GPSLongitude": "lon",
@@ -92,31 +110,35 @@ def makeExifDf(p: Path, columns: list = []) -> pd.DataFrame:
     df["filename"] = p.stem
     df["starttime"] = startDate
     df["fps"] = fps
-    df["sec"] = df["datetime"].map(lambda x: int(_getDfSecondsDifference(startDate, x)))
+    df["sec"] = df["datetime"].map(lambda x: int(
+        _getDfSecondsDifference(startDate, x)))
     df["frame"] = df["sec"].map(lambda x: int(x * fps))
     firstFrame = df.loc[df.index[0], "frame"]
     if firstFrame < 0:
         df["frame"] = df["frame"] - firstFrame
-    df[["lon3857", "lat3857"]] = df.apply(lambda x: _getDfTransGps(x["lon"], x["lat"]), axis=1, result_type="expand")
+    df[["lon3857", "lat3857"]] = df.apply(lambda x: _getDfTransGps(
+        x["lon"], x["lat"]), axis=1, result_type="expand")
     return df[columns] if columns else df
 
+
 def saveExifCsv(df: pd.DataFrame, out: Path) -> None:
-    df.to_csv(out, index = False)
+    df.to_csv(out, index=False)
 
 
 if __name__ == '__main__':
-    folder = Path(r"data\raw\insta360")
-    name = "SLI_Sample_data_4.mp4"
+    folder = Path(r"H:\DCIM\Movie")
+    name = "20250226112032_000029A.MP4"
     file = (folder / name)
 
     print(file)
-    
+
     # columns = ["filename", "datetime", "lat", "lon", "speed", "azimuth"]
     df = makeExifDf(file, [])
     print(df)
     if len(df):
         out = (folder / f"{file.stem}.csv")
         saveExifCsv(df, out)
-    df["datetime"] = df["datetime"].apply(lambda x: re.sub(r"(\d{4}):(\d{2}):(\d{2})", r"\1-\2-\3", x))
+    df["datetime"] = df["datetime"].apply(
+        lambda x: re.sub(r"(\d{4}):(\d{2}):(\d{2})", r"\1-\2-\3", x))
     df["Datetime"] = pd.to_datetime(df["datetime"], format="%Y-%m-%d %H:%M:%S")
     print(df)

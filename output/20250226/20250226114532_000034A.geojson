@@ -1,0 +1,1538 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.532503,
+            25.015878
+          ],
+          [
+            121.532569,
+            25.015914
+          ],
+          [
+            121.532633,
+            25.015956
+          ],
+          [
+            121.532683,
+            25.016
+          ],
+          [
+            121.532747,
+            25.016053
+          ],
+          [
+            121.532797,
+            25.016108
+          ],
+          [
+            121.532828,
+            25.016169
+          ],
+          [
+            121.532844,
+            25.016244
+          ],
+          [
+            121.532878,
+            25.016319
+          ],
+          [
+            121.532928,
+            25.016397
+          ],
+          [
+            121.532975,
+            25.016475
+          ],
+          [
+            121.533025,
+            25.016544
+          ],
+          [
+            121.533089,
+            25.016614
+          ],
+          [
+            121.533156,
+            25.016678
+          ],
+          [
+            121.533219,
+            25.016739
+          ],
+          [
+            121.533283,
+            25.016789
+          ],
+          [
+            121.533333,
+            25.016833
+          ],
+          [
+            121.533367,
+            25.016878
+          ],
+          [
+            121.533397,
+            25.016919
+          ],
+          [
+            121.533414,
+            25.016964
+          ],
+          [
+            121.533431,
+            25.017017
+          ],
+          [
+            121.533447,
+            25.017072
+          ],
+          [
+            121.533464,
+            25.017139
+          ],
+          [
+            121.533497,
+            25.017211
+          ],
+          [
+            121.533497,
+            25.017286
+          ],
+          [
+            121.533511,
+            25.017367
+          ],
+          [
+            121.533528,
+            25.017453
+          ],
+          [
+            121.533544,
+            25.017542
+          ],
+          [
+            121.533561,
+            25.017639
+          ],
+          [
+            121.533578,
+            25.017742
+          ],
+          [
+            121.533594,
+            25.017842
+          ],
+          [
+            121.533625,
+            25.017944
+          ],
+          [
+            121.533642,
+            25.01805
+          ],
+          [
+            121.533658,
+            25.018161
+          ],
+          [
+            121.533692,
+            25.018267
+          ],
+          [
+            121.533708,
+            25.018372
+          ],
+          [
+            121.533739,
+            25.018478
+          ],
+          [
+            121.533756,
+            25.018578
+          ],
+          [
+            121.533789,
+            25.018681
+          ],
+          [
+            121.533806,
+            25.018775
+          ],
+          [
+            121.533822,
+            25.018867
+          ],
+          [
+            121.533856,
+            25.018953
+          ],
+          [
+            121.533869,
+            25.019031
+          ],
+          [
+            121.533886,
+            25.019092
+          ],
+          [
+            121.533903,
+            25.019144
+          ],
+          [
+            121.533919,
+            25.019178
+          ],
+          [
+            121.533936,
+            25.019197
+          ],
+          [
+            121.533969,
+            25.019206
+          ],
+          [
+            121.534,
+            25.019206
+          ],
+          [
+            121.534017,
+            25.019203
+          ],
+          [
+            121.534033,
+            25.019197
+          ],
+          [
+            121.53405,
+            25.019194
+          ],
+          [
+            121.534067,
+            25.019189
+          ],
+          [
+            121.534067,
+            25.019189
+          ],
+          [
+            121.534083,
+            25.019186
+          ],
+          [
+            121.534083,
+            25.019181
+          ],
+          [
+            121.534097,
+            25.019178
+          ],
+          [
+            121.534131,
+            25.019169
+          ],
+          [
+            121.534147,
+            25.019172
+          ],
+          [
+            121.534181,
+            25.019172
+          ],
+          [
+            121.534211,
+            25.019181
+          ],
+          [
+            121.534228,
+            25.019178
+          ],
+          [
+            121.534261,
+            25.019172
+          ],
+          [
+            121.534294,
+            25.019164
+          ],
+          [
+            121.534311,
+            25.019153
+          ],
+          [
+            121.534311,
+            25.019142
+          ],
+          [
+            121.534325,
+            25.019133
+          ],
+          [
+            121.534325,
+            25.019128
+          ],
+          [
+            121.534325,
+            25.019128
+          ],
+          [
+            121.534342,
+            25.019128
+          ],
+          [
+            121.534342,
+            25.019111
+          ],
+          [
+            121.534325,
+            25.0191
+          ],
+          [
+            121.534311,
+            25.019083
+          ],
+          [
+            121.534311,
+            25.019067
+          ],
+          [
+            121.534325,
+            25.019042
+          ],
+          [
+            121.534342,
+            25.018978
+          ],
+          [
+            121.534325,
+            25.018967
+          ],
+          [
+            121.534325,
+            25.01895
+          ],
+          [
+            121.534311,
+            25.018908
+          ],
+          [
+            121.534261,
+            25.018908
+          ]
+        ]
+      },
+      "properties": {
+        "filename": "20250226114532_000034A",
+        "starttime": "2025-02-26 11:45:31",
+        "endtime": "2025-02-26 11:46:50"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.532503,
+          25.015878
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:45:31",
+        "speed": 21.4073,
+        "azimuth": 47.55
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.532569,
+          25.015914
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:45:32",
+        "speed": 25.6558,
+        "azimuth": 53.41
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.532633,
+          25.015956
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:45:33",
+        "speed": 26.7077,
+        "azimuth": 51.0
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.532683,
+          25.016
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:45:34",
+        "speed": 26.767,
+        "azimuth": 43.1
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.532747,
+          25.016053
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:45:35",
+        "speed": 26.7984,
+        "azimuth": 41.79
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.532797,
+          25.016108
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:45:36",
+        "speed": 26.6892,
+        "azimuth": 31.27
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.532828,
+          25.016169
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:45:37",
+        "speed": 28.6467,
+        "azimuth": 18.66
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.532844,
+          25.016244
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:45:38",
+        "speed": 30.6099,
+        "azimuth": 15.86
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.532878,
+          25.016319
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:45:39",
+        "speed": 32.3378,
+        "azimuth": 20.92
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.532928,
+          25.016397
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:45:40",
+        "speed": 33.1656,
+        "azimuth": 28.21
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.532975,
+          25.016475
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:45:41",
+        "speed": 34.3898,
+        "azimuth": 34.47
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.533025,
+          25.016544
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:45:42",
+        "speed": 35.125,
+        "azimuth": 38.75
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.533089,
+          25.016614
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:45:43",
+        "speed": 35.2528,
+        "azimuth": 41.17
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.533156,
+          25.016678
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:45:44",
+        "speed": 33.9898,
+        "azimuth": 42.93
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.533219,
+          25.016739
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:45:45",
+        "speed": 31.1636,
+        "azimuth": 45.06
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.533283,
+          25.016789
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:45:46",
+        "speed": 27.1911,
+        "azimuth": 46.34
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.533333,
+          25.016833
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:45:47",
+        "speed": 23.826,
+        "azimuth": 41.21
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.533367,
+          25.016878
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:45:48",
+        "speed": 20.6831,
+        "azimuth": 34.04
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.533397,
+          25.016919
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:45:49",
+        "speed": 18.8422,
+        "azimuth": 26.91
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.533414,
+          25.016964
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:45:50",
+        "speed": 18.8589,
+        "azimuth": 22.65
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.533431,
+          25.017017
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:45:51",
+        "speed": 23.013,
+        "azimuth": 20.02
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.533447,
+          25.017072
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:45:52",
+        "speed": 25.352,
+        "azimuth": 17.95
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.533464,
+          25.017139
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:45:53",
+        "speed": 28.2115,
+        "azimuth": 12.86
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.533497,
+          25.017211
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:45:54",
+        "speed": 30.7506,
+        "azimuth": 11.44
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.533497,
+          25.017286
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:45:55",
+        "speed": 31.7748,
+        "azimuth": 8.64
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.533511,
+          25.017367
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:45:56",
+        "speed": 32.9767,
+        "azimuth": 7.7
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.533528,
+          25.017453
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:45:57",
+        "speed": 35.6658,
+        "azimuth": 9.47
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.533544,
+          25.017542
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:45:58",
+        "speed": 38.342,
+        "azimuth": 11.28
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.533561,
+          25.017639
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:45:59",
+        "speed": 38.0086,
+        "azimuth": 8.19
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.533578,
+          25.017742
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:46:00",
+        "speed": 38.9031,
+        "azimuth": 10.0
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.533594,
+          25.017842
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:46:01",
+        "speed": 39.5087,
+        "azimuth": 8.83
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.533625,
+          25.017944
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:46:02",
+        "speed": 39.9402,
+        "azimuth": 8.69
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.533642,
+          25.01805
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:46:03",
+        "speed": 41.5052,
+        "azimuth": 8.88
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.533658,
+          25.018161
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:46:04",
+        "speed": 43.0108,
+        "azimuth": 11.56
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.533692,
+          25.018267
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:46:05",
+        "speed": 42.1256,
+        "azimuth": 10.73
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.533708,
+          25.018372
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:46:06",
+        "speed": 42.0645,
+        "azimuth": 8.89
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.533739,
+          25.018478
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:46:07",
+        "speed": 41.5644,
+        "azimuth": 10.88
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.533756,
+          25.018578
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:46:08",
+        "speed": 40.8496,
+        "azimuth": 11.74
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.533789,
+          25.018681
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:46:09",
+        "speed": 39.6513,
+        "azimuth": 14.46
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.533806,
+          25.018775
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:46:10",
+        "speed": 37.9734,
+        "azimuth": 11.28
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.533822,
+          25.018867
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:46:11",
+        "speed": 35.6566,
+        "azimuth": 11.18
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.533856,
+          25.018953
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:46:12",
+        "speed": 33.6971,
+        "azimuth": 11.08
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.533869,
+          25.019031
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:46:13",
+        "speed": 29.332,
+        "azimuth": 11.41
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.533886,
+          25.019092
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:46:14",
+        "speed": 24.1705,
+        "azimuth": 14.14
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.533903,
+          25.019144
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:46:15",
+        "speed": 18.007,
+        "azimuth": 17.01
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.533919,
+          25.019178
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:46:16",
+        "speed": 12.964,
+        "azimuth": 37.39
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.533936,
+          25.019197
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:46:17",
+        "speed": 12.238,
+        "azimuth": 57.65
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.533969,
+          25.019206
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:46:18",
+        "speed": 9.3896,
+        "azimuth": 79.46
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.534,
+          25.019206
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:46:19",
+        "speed": 9.2915,
+        "azimuth": 96.39
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.534017,
+          25.019203
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:46:20",
+        "speed": 7.9025,
+        "azimuth": 108.31
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.534033,
+          25.019197
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:46:21",
+        "speed": 6.5172,
+        "azimuth": 105.99
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.53405,
+          25.019194
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:46:22",
+        "speed": 5.0282,
+        "azimuth": 105.99
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.534067,
+          25.019189
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:46:23",
+        "speed": 3.3762,
+        "azimuth": 105.99
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.534067,
+          25.019189
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:46:24",
+        "speed": 0.0,
+        "azimuth": 105.99
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.534083,
+          25.019186
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:46:25",
+        "speed": 0.0,
+        "azimuth": 105.99
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.534083,
+          25.019181
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:46:26",
+        "speed": 0.0,
+        "azimuth": 105.99
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.534097,
+          25.019178
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:46:27",
+        "speed": 7.4691,
+        "azimuth": 112.24
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.534131,
+          25.019169
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:46:28",
+        "speed": 9.1711,
+        "azimuth": 93.55
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.534147,
+          25.019172
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:46:29",
+        "speed": 10.3582,
+        "azimuth": 88.84
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.534181,
+          25.019172
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:46:30",
+        "speed": 10.9638,
+        "azimuth": 96.82
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.534211,
+          25.019181
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:46:31",
+        "speed": 11.0638,
+        "azimuth": 87.56
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.534228,
+          25.019178
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:46:32",
+        "speed": 11.4824,
+        "azimuth": 90.3
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.534261,
+          25.019172
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:46:33",
+        "speed": 10.136,
+        "azimuth": 105.21
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.534294,
+          25.019164
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:46:34",
+        "speed": 8.6488,
+        "azimuth": 126.46
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.534311,
+          25.019153
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:46:35",
+        "speed": 6.9987,
+        "azimuth": 127.95
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.534311,
+          25.019142
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:46:36",
+        "speed": 4.9097,
+        "azimuth": 145.9
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.534325,
+          25.019133
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:46:37",
+        "speed": 3.9411,
+        "azimuth": 149.05
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.534325,
+          25.019128
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:46:38",
+        "speed": 3.0002,
+        "azimuth": 118.92
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.534325,
+          25.019128
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:46:39",
+        "speed": 0.0,
+        "azimuth": 60.26
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.534342,
+          25.019128
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:46:40",
+        "speed": 0.0,
+        "azimuth": 136.69
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.534342,
+          25.019111
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:46:41",
+        "speed": 4.9226,
+        "azimuth": 177.17
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.534325,
+          25.0191
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:46:42",
+        "speed": 7.6821,
+        "azimuth": 214.52
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.534311,
+          25.019083
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:46:43",
+        "speed": 6.0838,
+        "azimuth": 183.4
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.534311,
+          25.019067
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:46:44",
+        "speed": 6.0283,
+        "azimuth": 180.88
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.534325,
+          25.019042
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:46:45",
+        "speed": 6.9709,
+        "azimuth": 178.11
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.534342,
+          25.018978
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:46:46",
+        "speed": 11.5954,
+        "azimuth": 175.88
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.534325,
+          25.018967
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:46:47",
+        "speed": 10.3379,
+        "azimuth": 177.63
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.534325,
+          25.01895
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:46:48",
+        "speed": 8.9526,
+        "azimuth": 182.41
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.534311,
+          25.018908
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:46:49",
+        "speed": 9.3933,
+        "azimuth": 185.54
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.534261,
+          25.018908
+        ]
+      },
+      "properties": {
+        "datetime": "2025-02-26 11:46:50",
+        "speed": 8.4859,
+        "azimuth": 204.69
+      }
+    }
+  ]
+}

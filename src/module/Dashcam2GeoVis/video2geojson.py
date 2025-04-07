@@ -1,11 +1,9 @@
 import pandas as pd
 from pathlib import Path
 import geojson
-from pyproj import Transformer
-from datetime import datetime
 import os
 from geojson import Point, LineString, Feature, FeatureCollection
-from utlis.makeExif import makeExifDf, saveExifCsv
+from utlis.makeExif import makeExifDf
 from utlis.GPSProcessor import GPXProcessor
 import re
 
@@ -14,6 +12,8 @@ class Video2GeoJson:
     def __init__(self, video_path: Path) -> None:
         self.video_path = video_path
         self.df = makeExifDf(video_path, [])
+        if self.df.empty:
+            raise ValueError(f"No GPS data found in video")
 
     def create_point_feature(self):
         point_feartures = []
@@ -52,9 +52,10 @@ class Video2GeoJson:
 
         return feature_collection
 
-    def save_geojson(self, output_dir:Path):
+    def save_geojson(self, output_dir: Path):
         feature_collection = self.create_feature_collection()
-        output_path = os.path.join(output_dir, f"{self.video_path.stem}.geojson")
+        output_path = os.path.join(
+            output_dir, f"{self.video_path.stem}.geojson")
         with open(output_path, "w") as f:
             geojson.dump(feature_collection, f, indent=2)
 
@@ -78,7 +79,7 @@ class PanoramaVideo2GeoJson:
             point_feartures.append(point_feature)
 
         return point_feartures
-    
+
     def create_line_feature(self):
         line_coordinates = list(zip(self.df["lon"], self.df["lat"]))
         line_properties = {
@@ -91,7 +92,7 @@ class PanoramaVideo2GeoJson:
             line_coordinates), properties=line_properties)
 
         return line_feature
-    
+
     def create_feature_collection(self):
         point_features = self.create_point_feature()
         line_feature = self.create_line_feature()
@@ -101,19 +102,19 @@ class PanoramaVideo2GeoJson:
         )
 
         return feature_collection
-    
-    def save_geojson(self, output_dir:Path):
+
+    def save_geojson(self, output_dir: Path):
         feature_collection = self.create_feature_collection()
-        output_path = os.path.join(output_dir, f"{self.video_path.stem}.geojson")
+        output_path = os.path.join(
+            output_dir, f"{self.video_path.stem}.geojson")
         with open(output_path, "w") as f:
             geojson.dump(feature_collection, f, indent=2)
-
 
 
 if __name__ == "__main__":
     folder = Path(r"data\raw\insta360")
     name = "Guilin_Rd.mp4"
-    
+
     video_path = os.path.join(folder, name)
 
     gpx_path = os.path.join(folder, "Guilin_Rd.gpx")
