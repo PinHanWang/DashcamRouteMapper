@@ -1,0 +1,28 @@
+*.pyc
+__pycache__/
+.vscode
+
+
+
+# Enviroment
+.env
+.venv
+env/
+venv/
+ENV/
+.venv/
+env.bak/
+venv.bak/
+ENV.bak/
+.venv.bak/
+
+
+# Other folder
+data/
+logs/
+projects/
+
+
+# Temp files
+**/*.log
+**/tempCodeRunnerFile.py
