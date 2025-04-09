@@ -6,6 +6,7 @@ from geojson import Point, LineString, Feature, FeatureCollection
 from utlis.makeExif import makeExifDf
 from utlis.GPSProcessor import GPXProcessor
 import re
+from geopy.distance import geodesic
 
 
 class Video2GeoJson:
@@ -31,10 +32,15 @@ class Video2GeoJson:
 
     def create_line_feature(self):
         line_coordinates = list(zip(self.df["lon"], self.df["lat"]))
+
+        # Calculate the total distance of the line
+        total_distance = self.calculate_distance(line_coordinates)
+
         line_properties = {
             "filename": self.df["filename"].iloc[0],
             "starttime": re.sub(r"(\d{4}):(\d{2}):(\d{2})", r"\1-\2-\3", self.df["datetime"].iloc[0]),
             "endtime": re.sub(r"(\d{4}):(\d{2}):(\d{2})", r"\1-\2-\3", self.df["datetime"].iloc[-1]),
+            "length(m)": round(total_distance, 3), # meters
         }
 
         line_feature = Feature(geometry=LineString(
@@ -59,6 +65,14 @@ class Video2GeoJson:
         with open(output_path, "w") as f:
             geojson.dump(feature_collection, f, indent=2)
 
+    def calculate_distance(self, line_coordinates):
+        total_distance = 0.0
+        for i in range(len(line_coordinates) - 1):
+            point1 = (line_coordinates[i][1], line_coordinates[i][0])
+            point2 = (line_coordinates[i + 1][1], line_coordinates[i + 1][0])
+            distance = geodesic(point1, point2).meters
+            total_distance += distance
+        return total_distance
 
 class PanoramaVideo2GeoJson:
     def __init__(self, video_path: Path, gpx_path: Path) -> None:
@@ -82,10 +96,15 @@ class PanoramaVideo2GeoJson:
 
     def create_line_feature(self):
         line_coordinates = list(zip(self.df["lon"], self.df["lat"]))
+
+        # Calculate the total distance of the line
+        total_distance = self.calculate_distance(line_coordinates)
+
         line_properties = {
             "filename": self.video_path.stem,
             "starttime": self.df["time"].iloc[0].strftime("%Y-%m-%d %H:%M:%S"),
             "endtime": self.df["time"].iloc[-1].strftime("%Y-%m-%d %H:%M:%S"),
+            "length(m)": round(total_distance, 3),  # meters
         }
 
         line_feature = Feature(geometry=LineString(
@@ -109,6 +128,15 @@ class PanoramaVideo2GeoJson:
             output_dir, f"{self.video_path.stem}.geojson")
         with open(output_path, "w") as f:
             geojson.dump(feature_collection, f, indent=2)
+
+    def calculate_distance(self, line_coordinates):
+        total_distance = 0.0
+        for i in range(len(line_coordinates) - 1):
+            point1 = (line_coordinates[i][1], line_coordinates[i][0])
+            point2 = (line_coordinates[i + 1][1], line_coordinates[i + 1][0])
+            distance = geodesic(point1, point2).meters
+            total_distance += distance
+        return total_distance
 
 
 if __name__ == "__main__":
