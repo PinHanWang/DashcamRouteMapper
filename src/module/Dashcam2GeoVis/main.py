@@ -26,7 +26,7 @@ def merge_all_geojson(dir: Path):
     print(f"Combined geojson saved to {merged_geojson_path}")
 
 
-def convert_video_to_geojson(video_dir: Path, output_dir: Path):
+def convert_video_to_geojson(video_dir: Path, output_dir: Path, type: str = "all"):
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
@@ -46,7 +46,7 @@ def convert_video_to_geojson(video_dir: Path, output_dir: Path):
         else:
             try:
                 video2geojson = Video2GeoJson(mp4_file)
-                video2geojson.save_geojson(output_dir=output_dir)
+                video2geojson.save_geojson(output_dir=output_dir, type = type)
             except Exception as e:
                 print(f"Error processing in {mp4_file}: {e}")
 
@@ -56,4 +56,4 @@ def convert_video_to_geojson(video_dir: Path, output_dir: Path):
 if __name__ == "__main__":
     dir = Path(r'H:\DCIM\Movie')
     outptut_dir = Path(r'D:\MyProject\DashcamRouteMapper\output\20250508')
-    convert_video_to_geojson(dir, outptut_dir)
+    convert_video_to_geojson(dir, outptut_dir, type="all")
