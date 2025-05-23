@@ -54,9 +54,18 @@ class Video2GeoJson:
 
         return line_feature
 
-    def create_feature_collection(self):
-        point_features = self.create_point_feature()
-        line_feature = self.create_line_feature()
+    def create_feature_collection(self, type = "all"):
+        if type == "all":
+            point_features = self.create_point_feature()
+            line_feature = self.create_line_feature()
+        elif type == "point":
+            point_features = self.create_point_feature()
+            line_feature = None
+        elif type == "line":
+            point_features = []
+            line_feature = self.create_line_feature()
+        else:
+            raise ValueError("Invalid type. Choose 'all', 'point', or 'line'.")
 
         feature_collection = FeatureCollection(
             features=[line_feature] + point_features
@@ -64,8 +73,8 @@ class Video2GeoJson:
 
         return feature_collection
 
-    def save_geojson(self, output_dir: Path):
-        feature_collection = self.create_feature_collection()
+    def save_geojson(self, output_dir: Path,  type: str = "all"):
+        feature_collection = self.create_feature_collection(type)
         output_path = os.path.join(
             output_dir, f"{self.video_path.stem}.geojson")
         with open(output_path, "w") as f:
