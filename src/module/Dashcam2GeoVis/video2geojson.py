@@ -7,6 +7,7 @@ from utlis.makeExif import makeExifDf
 from utlis.GPSProcessor import GPXProcessor
 import re
 from geopy.distance import geodesic
+from datetime import datetime
 
 
 class Video2GeoJson:
@@ -20,8 +21,10 @@ class Video2GeoJson:
         point_feartures = []
         for _, row in self.df.iterrows():
             point = Point((row["lon"], row["lat"]))
+            datetime_str = re.sub(r"(\d{4}):(\d{2}):(\d{2})", r"\1-\2-\3", row["datetime"])
+            dt_obj = datetime.strptime(datetime_str, "%Y-%m-%d %H:%M:%S")
             properties = {
-                "datetime": re.sub(r"(\d{4}):(\d{2}):(\d{2})", r"\1-\2-\3", row["datetime"]),
+                "datetime": dt_obj.isoformat(),
                 "speed": row["speed"],
                 "azimuth": row["azimuth"],
             }
@@ -35,11 +38,14 @@ class Video2GeoJson:
 
         # Calculate the total distance of the line
         total_distance = self.calculate_distance(line_coordinates)
-
+        starttime_str = re.sub(r"(\d{4}):(\d{2}):(\d{2})", r"\1-\2-\3", self.df["datetime"].iloc[0])
+        endtime_str = re.sub(r"(\d{4}):(\d{2}):(\d{2})", r"\1-\2-\3", self.df["datetime"].iloc[-1])
+        starttime_obj = datetime.strptime(starttime_str, "%Y-%m-%d %H:%M:%S")
+        endtime_obj = datetime.strptime(endtime_str, "%Y-%m-%d %H:%M:%S")
         line_properties = {
             "filename": self.df["filename"].iloc[0],
-            "starttime": re.sub(r"(\d{4}):(\d{2}):(\d{2})", r"\1-\2-\3", self.df["datetime"].iloc[0]),
-            "endtime": re.sub(r"(\d{4}):(\d{2}):(\d{2})", r"\1-\2-\3", self.df["datetime"].iloc[-1]),
+            "starttime": starttime_obj.isoformat(),
+            "endtime": endtime_obj.isoformat(),
             "length(m)": round(total_distance, 3), # meters
         }
 
@@ -140,14 +146,7 @@ class PanoramaVideo2GeoJson:
 
 
 if __name__ == "__main__":
-    folder = Path(r"data\raw\insta360")
-    name = "Guilin_Rd.mp4"
+    video_path = Path(r"H:\DCIM\Movie\20250523155419_000036A.MP4")
+    video2geojson = Video2GeoJson(video_path)
+    video2geojson.save_geojson(output_dir=Path(r"H:\DCIM\Movie\output"))
 
-    video_path = os.path.join(folder, name)
-
-    gpx_path = os.path.join(folder, "Guilin_Rd.gpx")
-
-    pano2geojson = PanoramaVideo2GeoJson(video_path, gpx_path)
-    pano2geojson.save_geojson(folder)
-    print(pano2geojson.df["time"].iloc[0])
-    print(type(pano2geojson.df["time"].iloc[0]))
