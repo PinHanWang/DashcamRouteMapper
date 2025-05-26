@@ -19,7 +19,7 @@ def merge_all_geojson(dir: Path):
 
     combined_feature_collection = geojson.FeatureCollection(all_faetures)
 
-    merged_geojson_path = os.path.join(dir, f"{datetime.datetime.now().strftime('%Y%m%d%H%M%S')}.geojson")
+    merged_geojson_path = os.path.join(dir, f"{datetime.datetime.now().strftime('%Y%m%d')}.geojson")
     with open(merged_geojson_path, "w") as f:
         geojson.dump(combined_feature_collection, f, indent=2)
 
@@ -54,6 +54,6 @@ def convert_video_to_geojson(video_dir: Path, output_dir: Path, type: str = "all
 
 
 if __name__ == "__main__":
-    dir = Path(r'H:\DCIM\Movie')
-    outptut_dir = Path(r'D:\MyProject\DashcamRouteMapper\output\0523_1')
+    dir = Path(r'J:\DCIM\Movie')
+    outptut_dir = Path(r'E:\Peter\DashcamRouteMapper\output\0523')
     convert_video_to_geojson(dir, outptut_dir, type="point")
