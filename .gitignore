@@ -21,6 +21,7 @@ ENV.bak/
 data/
 logs/
 projects/
+output/
 
 
 # Temp files
