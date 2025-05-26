@@ -21,12 +21,15 @@ class Video2GeoJson:
         point_feartures = []
         for _, row in self.df.iterrows():
             point = Point((row["lon"], row["lat"]))
-            datetime_str = re.sub(r"(\d{4}):(\d{2}):(\d{2})", r"\1-\2-\3", row["datetime"])
+            datetime_str = re.sub(
+                r"(\d{4}):(\d{2}):(\d{2})", r"\1-\2-\3", row["datetime"])
             dt_obj = datetime.strptime(datetime_str, "%Y-%m-%d %H:%M:%S")
+            timestamp = int(dt_obj.timestamp())
             properties = {
-                "datetime": dt_obj.isoformat(),
-                "speed": row["speed"],
-                "azimuth": row["azimuth"],
+                "timestamp": timestamp
+                # "datetime": dt_obj.isoformat() + 'Z',
+                # "speed": row["speed"],
+                # "azimuth": row["azimuth"],
             }
             point_feature = Feature(geometry=point, properties=properties)
             point_feartures.append(point_feature)
@@ -38,15 +41,17 @@ class Video2GeoJson:
 
         # Calculate the total distance of the line
         total_distance = self.calculate_distance(line_coordinates)
-        starttime_str = re.sub(r"(\d{4}):(\d{2}):(\d{2})", r"\1-\2-\3", self.df["datetime"].iloc[0])
-        endtime_str = re.sub(r"(\d{4}):(\d{2}):(\d{2})", r"\1-\2-\3", self.df["datetime"].iloc[-1])
+        starttime_str = re.sub(
+            r"(\d{4}):(\d{2}):(\d{2})", r"\1-\2-\3", self.df["datetime"].iloc[0])
+        endtime_str = re.sub(r"(\d{4}):(\d{2}):(\d{2})",
+                             r"\1-\2-\3", self.df["datetime"].iloc[-1])
         starttime_obj = datetime.strptime(starttime_str, "%Y-%m-%d %H:%M:%S")
         endtime_obj = datetime.strptime(endtime_str, "%Y-%m-%d %H:%M:%S")
         line_properties = {
             "filename": self.df["filename"].iloc[0],
             "starttime": starttime_obj.isoformat(),
             "endtime": endtime_obj.isoformat(),
-            "length(m)": round(total_distance, 3), # meters
+            "length(m)": round(total_distance, 3),  # meters
         }
 
         line_feature = Feature(geometry=LineString(
@@ -54,24 +59,28 @@ class Video2GeoJson:
 
         return line_feature
 
-    def create_feature_collection(self, type = "all"):
+    def create_feature_collection(self, type="all"):
         if type == "all":
             point_features = self.create_point_feature()
             line_feature = self.create_line_feature()
+            feature_collection = FeatureCollection(
+                features=[line_feature] + point_features)
+            return feature_collection
+
         elif type == "point":
             point_features = self.create_point_feature()
-            line_feature = None
+            feature_collection = FeatureCollection(
+                features=point_features
+            )
+            return feature_collection
         elif type == "line":
-            point_features = []
             line_feature = self.create_line_feature()
+            feature_collection = FeatureCollection(
+                features=[line_feature]
+            )
+            return feature_collection
         else:
             raise ValueError("Invalid type. Choose 'all', 'point', or 'line'.")
-
-        feature_collection = FeatureCollection(
-            features=[line_feature] + point_features
-        )
-
-        return feature_collection
 
     def save_geojson(self, output_dir: Path,  type: str = "all"):
         feature_collection = self.create_feature_collection(type)
@@ -88,6 +97,7 @@ class Video2GeoJson:
             distance = geodesic(point1, point2).meters
             total_distance += distance
         return total_distance
+
 
 class PanoramaVideo2GeoJson:
     def __init__(self, video_path: Path, gpx_path: Path) -> None:
@@ -158,4 +168,3 @@ if __name__ == "__main__":
     video_path = Path(r"H:\DCIM\Movie\20250523155419_000036A.MP4")
     video2geojson = Video2GeoJson(video_path)
     video2geojson.save_geojson(output_dir=Path(r"H:\DCIM\Movie\output"))
-

@@ -55,5 +55,5 @@ def convert_video_to_geojson(video_dir: Path, output_dir: Path, type: str = "all
 
 if __name__ == "__main__":
     dir = Path(r'H:\DCIM\Movie')
-    outptut_dir = Path(r'D:\MyProject\DashcamRouteMapper\output\20250508')
-    convert_video_to_geojson(dir, outptut_dir, type="all")
+    outptut_dir = Path(r'D:\MyProject\DashcamRouteMapper\output\0523')
+    convert_video_to_geojson(dir, outptut_dir, type="point")
