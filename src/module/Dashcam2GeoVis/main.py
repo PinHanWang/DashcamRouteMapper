@@ -36,6 +36,7 @@ def convert_video_to_geojson(video_dir: Path, output_dir: Path, type: str = "all
     for mp4_file in tqdm(mp4_files, desc="Converting video information to geojson"):
     # for mp4_file in mp4_files:
         # print(f"Processing {mp4_file}...")
+<<<<<<< HEAD
         # if os.path.exists(os.path.join(video_dir, mp4_file.stem + ".gpx")):
         #     try:
         #         pano2geojson = PanoramaVideo2GeoJson(
@@ -49,11 +50,32 @@ def convert_video_to_geojson(video_dir: Path, output_dir: Path, type: str = "all
             video2geojson.save_geojson(output_dir=output_dir, type = type)
         except Exception as e:
             print(f"Error processing in {mp4_file}: {e}")
+=======
+        if os.path.exists(os.path.join(video_dir, mp4_file.stem + ".gpx")):
+            try:
+                pano2geojson = PanoramaVideo2GeoJson(
+                    mp4_file, os.path.join(video_dir, mp4_file.stem + ".gpx"))
+                pano2geojson.save_geojson(output_dir=output_dir)
+            except Exception as e:
+                print(f"Error processing in {mp4_file}: {e}")
+        else:
+            try:
+                video2geojson = Video2GeoJson(mp4_file)
+                video2geojson.save_geojson(output_dir=output_dir, type = type)
+            except Exception as e:
+                print(f"Error processing in {mp4_file}: {e}")
+>>>>>>> dev-dashcam2geo
 
     merge_all_geojson(outptut_dir)
 
 
 if __name__ == "__main__":
+<<<<<<< HEAD
     dir = Path(r'J:\DCIM\Movie')
     outptut_dir = Path(r'E:\Peter\DashcamRouteMapper\output\0523')
     convert_video_to_geojson(dir, outptut_dir, type="point")
+=======
+    dir = Path(r'H:\DCIM\Movie')
+    outptut_dir = Path(r'D:\MyProject\DashcamRouteMapper\output\20250508')
+    convert_video_to_geojson(dir, outptut_dir, type="all")
+>>>>>>> dev-dashcam2geo
