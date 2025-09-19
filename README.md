@@ -232,19 +232,6 @@ print(f"插值後軌跡點數量: {len(interpolated_points)}")
 
 ## 工具使用範例
 
-### 命令列使用
-
-```bash
-# 處理單一影片
-python Video2Geojson.py
-
-# 批量處理目錄
-python main.py
-
-# 轉換為CSV格式
-python json2csv.py
-```
-
 ### 程式碼整合
 
 ```python
