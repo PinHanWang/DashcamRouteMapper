@@ -2,9 +2,14 @@ import pandas as pd
 from pathlib import Path
 import geojson
 import os
-from geojson import Point, LineString, Feature, FeatureCollection
+from typing import List, Tuple
+from geojson import Point, LineString, Feature, FeatureCollection  
+import sys
+current_dir = Path(__file__).parent
+parent_dir = current_dir.parent
+sys.path.insert(0, str(parent_dir))
+
 from utlis.makeExif import makeExifDf
-from utlis.GPSProcessor import GPXProcessor
 import re
 from geopy.distance import geodesic
 from datetime import datetime
@@ -12,10 +17,12 @@ from datetime import datetime
 
 class Video2GeoJson:
     def __init__(self, video_path: Path) -> None:
-        self.video_path = video_path
-        self.df = makeExifDf(video_path, [])
-        if self.df.empty:
-            raise ValueError(f"No GPS data found in video")
+        self.video_path = Path(video_path)
+        try:
+            self.df = makeExifDf(video_path, [])
+        except Exception as e:
+            raise ValueError(
+                f"Error reading video metadata, no GPS data found: {e}")
 
     def create_point_feature(self):
         point_feartures = []
@@ -59,45 +66,93 @@ class Video2GeoJson:
 
         return line_feature
 
-    def create_feature_collection(self, type="all"):
-        if type == "all":
-            point_features = self.create_point_feature()
-            line_feature = self.create_line_feature()
-            feature_collection = FeatureCollection(
-                features=[line_feature] + point_features)
-            return feature_collection
+    def create_feature_collection(self, feature_type="all"):
 
-        elif type == "point":
-            point_features = self.create_point_feature()
-            feature_collection = FeatureCollection(
-                features=point_features
-            )
-            return feature_collection
-        elif type == "line":
-            line_feature = self.create_line_feature()
-            feature_collection = FeatureCollection(
-                features=[line_feature]
-            )
-            return feature_collection
+        feature_collection = []
+        if feature_type == "all":
+            try:
+                line_features = self.create_line_feature()
+                feature_collection.append(line_features)
+            except Exception as e:
+                pass
+
+            try:
+                point_features = self.create_point_feature()
+                feature_collection.extend(point_features)
+            except Exception as e:
+                pass
+
+        elif feature_type == "point":
+            try:
+                point_features = self.create_point_feature()
+                feature_collection.extend(point_features)
+            except Exception as e:
+                pass
+
+        elif feature_type == "line":
+            try:
+                line_features = self.create_line_feature()
+                feature_collection.append(line_features)
+            except Exception as e:
+                pass
         else:
             raise ValueError("Invalid type. Choose 'all', 'point', or 'line'.")
 
-    def save_geojson(self, output_dir: Path,  type: str = "all"):
-        feature_collection = self.create_feature_collection(type)
+        return FeatureCollection(features=feature_collection)
+
+    def save_geojson(self, output_dir: Path,  feature_type: str = "all"):
+
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
+
+        feature_collection = self.create_feature_collection(feature_type)
+
         output_path = os.path.join(
             output_dir, f"{self.video_path.stem}.geojson")
+
         with open(output_path, "w") as f:
             geojson.dump(feature_collection, f, indent=2)
 
-    def calculate_distance(self, line_coordinates):
+        # print(f"Geojson saved to {output_path}")
+
+    def _calculate_distance(self, coordinates: List[Tuple[float, float]]) -> float:
+        if len(coordinates) < 2:
+            return 0.0
+        
         total_distance = 0.0
-        for i in range(len(line_coordinates) - 1):
-            point1 = (line_coordinates[i][1], line_coordinates[i][0])
-            point2 = (line_coordinates[i + 1][1], line_coordinates[i + 1][0])
-            distance = geodesic(point1, point2).meters
-            total_distance += distance
+        for i in range(len(coordinates) - 1):
+            point1 = (coordinates[i][1], coordinates[i][0])
+            point2 = (coordinates[i + 1][1], coordinates[i + 1][0])
+            
+            try:
+                distance = geodesic(point1, point2).meters
+                total_distance += distance
+            except Exception:
+                continue
+        
         return total_distance
 
+    def _get_stats(self) -> dict:
+        stats = {}
+        coordinates = list(zip(self.df["lon"], self.df["lat"]))
+
+        try:
+            stats['Num_points'] = len(self.df)
+            stats['Start_time'] = self.df['datetime'].min()
+            stats['End_time'] = self.df['datetime'].max()
+            stats['Duration_sec'] = (datetime.strptime(stats['End_time'], "%Y:%m:%d %H:%M:%S") - datetime.strptime(stats['Start_time'], "%Y:%m:%d %H:%M:%S")).total_seconds() 
+            stats['Total_distance_m'] = self._calculate_distance(
+                list(zip(self.df["lon"], self.df["lat"])))
+            stats['Boundary'] = {
+                'min_lon': self.df['lon'].min(),
+                'max_lon': self.df['lon'].max(),
+                'min_lat': self.df['lat'].min(),
+                'max_lat': self.df['lat'].max(),
+            }
+        except Exception as e:
+            print(f"Error calculating stats: {e}")
+        
+        return stats
 
 # class PanoramaVideo2GeoJson:
 #     def __init__(self, video_path: Path, gpx_path: Path) -> None:
@@ -164,7 +219,13 @@ class Video2GeoJson:
 #         return total_distance
 
 
-if __name__ == "__main__":
-    video_path = Path(r"H:\DCIM\Movie\20250523155419_000036A.MP4")
+def main():
+    video_path = Path(r"H:\DCIM\Movie\20250915135613_000034A.MP4")
     video2geojson = Video2GeoJson(video_path)
-    video2geojson.save_geojson(output_dir=Path(r"H:\DCIM\Movie\output"))
+    video2geojson.save_geojson(output_dir=Path(r"H:\DCIM\Movie\output"), feature_type="all")
+    stats = video2geojson._get_stats()
+    print(stats)
+
+
+if __name__ == "__main__":
+    main()
