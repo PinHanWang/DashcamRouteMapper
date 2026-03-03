@@ -3,6 +3,7 @@ GeoJSON → CSV 轉換工具，含 EPSG:3857 座標欄位
 """
 import json
 import logging
+from datetime import datetime
 from pathlib import Path
 
 import pandas as pd
@@ -12,11 +13,13 @@ from src.module.DashcamRouteMapper.config import DEFAULT_FPS
 
 logger = logging.getLogger(__name__)
 
+# 模組層級建立一次，避免每筆座標重建（效能修正）
+_wgs84_to_3857 = Transformer.from_crs("EPSG:4326", "EPSG:3857", always_xy=True)
+
 
 def _getDfTransGps(lon: float, lat: float) -> tuple[float, float]:
     """WGS84（EPSG:4326）→ Web Mercator（EPSG:3857）座標轉換"""
-    transformer = Transformer.from_crs("EPSG:4326", "EPSG:3857", always_xy=True)
-    return transformer.transform(lon, lat)
+    return _wgs84_to_3857.transform(lon, lat)
 
 
 def json_to_csv_with_fields(
@@ -42,7 +45,7 @@ def json_to_csv_with_fields(
         rows = []
         filename = json_file.stem
         starttime = ""
-        sec = 0  # 影片秒數計數
+        sec_counter = 0  # fallback 計數器（無 datetime 時使用）
 
         for feature in features:
             geom_type = feature["geometry"]["type"]
@@ -54,11 +57,22 @@ def json_to_csv_with_fields(
             if geom_type == "Point":
                 props = feature["properties"]
                 coords = feature["geometry"]["coordinates"]
-                lon, lat = coords
+                # 修正：GeoJSON 座標可能含第三個元素（altitude），只取 lon/lat
+                lon, lat = coords[0], coords[1]
 
                 speed = props.get("speed", "")
                 azimuth = props.get("azimuth", "")
                 dt = props.get("datetime", "")
+
+                # 修正：優先從 datetime 與 starttime 計算真實秒數，fallback 用計數器
+                sec = sec_counter
+                if dt and starttime:
+                    try:
+                        dt_parsed = datetime.fromisoformat(dt.rstrip("Z"))
+                        st_parsed = datetime.fromisoformat(starttime)
+                        sec = int((dt_parsed - st_parsed).total_seconds())
+                    except Exception:
+                        sec = sec_counter
 
                 # WGS84 → EPSG:3857
                 lon3857, lat3857 = _getDfTransGps(lon, lat)
@@ -73,12 +87,12 @@ def json_to_csv_with_fields(
                     "azimuth": azimuth,
                     "fps": fps,
                     "sec": sec,
-                    "frame": sec * fps,   # 修正：使用 fps 變數，而非硬編碼 60
+                    "frame": sec * fps,
                     "lon3857": lon3857,
                     "lat3857": lat3857,
                 }
                 rows.append(row)
-                sec += 1
+                sec_counter += 1
 
         df = pd.DataFrame(rows)
 
@@ -89,7 +103,6 @@ def json_to_csv_with_fields(
         output_path = output_folder / f"{filename}.csv"
         df.to_csv(output_path, index=False, encoding="utf-8-sig")
         logger.info("已輸出：%s", output_path)
-        print(f"已輸出：{output_path}")
 
 
 if __name__ == "__main__":

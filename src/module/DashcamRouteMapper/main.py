@@ -92,24 +92,30 @@ class DashcamRouteProcessor:
                 logger.warning("處理 %s 失敗：%s", video_file, e)
 
     def merge_all_geojson(self, directory: Path) -> None:
-        """合併資料夾內所有 GeoJSON 為單一時間戳記檔案"""
-        gjson_files = glob.glob(f"{directory}/**/*.geojson", recursive=True)
+        """
+        合併 directory 內的個別影片 GeoJSON 為單一時間戳記檔案。
+        合併結果輸出至 directory/merged/ 子目錄，避免重複執行時舊合併檔被再次納入。
+        """
+        # 只掃描 directory 頂層的 .geojson（個別影片輸出），不遞迴避免納入舊合併檔
+        gjson_files = list(directory.glob("*.geojson"))
 
         all_features = []
         for gjson_file in gjson_files:
             try:
-                with open(gjson_file, "r") as f:
+                with open(gjson_file, "r", encoding="utf-8") as f:
                     data = geojson.load(f)
                     all_features.extend(data["features"])
             except Exception as e:
                 logger.warning("讀取 %s 失敗：%s", gjson_file, e)
 
         combined = geojson.FeatureCollection(all_features)
+        merged_dir = directory / "merged"
+        merged_dir.mkdir(exist_ok=True)
         timestamp = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
-        merged_path = directory / f"{timestamp}.geojson"
+        merged_path = merged_dir / f"{timestamp}.geojson"
 
         try:
-            with open(merged_path, "w") as f:
+            with open(merged_path, "w", encoding="utf-8") as f:
                 geojson.dump(combined, f, indent=2)
             logger.info("合併 GeoJSON 已儲存至 %s", merged_path)
         except Exception as e:

@@ -52,7 +52,8 @@ class GPXProcessor:
         time = [pt['time'].timestamp() for pt in self.track_pts]
         lat = [pt['lat'] for pt in self.track_pts]
         lon = [pt['lon'] for pt in self.track_pts]
-        ele = [pt['ele'] for pt in self.track_pts]
+        # elevation 為 GPX 選填欄位，None 時以 0.0 替代，避免 interp1d crash
+        ele = [pt['ele'] if pt['ele'] is not None else 0.0 for pt in self.track_pts]
 
         time_interval = 1 / frequency
         new_times = np.arange(time[0], time[-1], time_interval)

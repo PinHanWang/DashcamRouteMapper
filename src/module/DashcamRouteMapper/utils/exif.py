@@ -13,6 +13,9 @@ from src.module.DashcamRouteMapper.config import EXIFTOOL_PATH
 
 logger = logging.getLogger(__name__)
 
+# 模組層級建立一次，避免每筆 GPS 點重建（效能修正）
+_wgs84_to_3857 = Transformer.from_crs("EPSG:4326", "EPSG:3857", always_xy=True)
+
 
 def _getExifStartTime(p: Path) -> tuple[int, str]:
     """
@@ -46,7 +49,7 @@ def _getExifStartTime(p: Path) -> tuple[int, str]:
         else:
             duration = datetime.strptime(l[2], "%H:%M:%S")
             startDate = createDate - timedelta(
-                minutes=duration.minute, seconds=duration.second
+                hours=duration.hour, minutes=duration.minute, seconds=duration.second
             )
 
     return fps, startDate.strftime("%Y:%m:%d %H:%M:%S")
@@ -100,8 +103,7 @@ def _getDfSecondsDifference(startTime: str, dateTime: str) -> int:
 
 def _getDfTransGps(lon: float, lat: float) -> tuple[float, float]:
     """座標轉換：WGS84（EPSG:4326）→ Web Mercator（EPSG:3857）"""
-    transformer = Transformer.from_crs("EPSG:4326", "EPSG:3857", always_xy=True)
-    return transformer.transform(lon, lat)
+    return _wgs84_to_3857.transform(lon, lat)
 
 
 def makeExifDf(p: Path, columns: list = []) -> pd.DataFrame:
@@ -133,9 +135,10 @@ def makeExifDf(p: Path, columns: list = []) -> pd.DataFrame:
     firstFrame = df.loc[df.index[0], "frame"]
     if firstFrame < 0:
         df["frame"] = df["frame"] - firstFrame
-    df[["lon3857", "lat3857"]] = df.apply(
-        lambda x: _getDfTransGps(x["lon"], x["lat"]), axis=1, result_type="expand"
-    )
+    # 向量化轉換，一次呼叫處理所有點（效能修正：避免每列重建 Transformer）
+    lon3857, lat3857 = _wgs84_to_3857.transform(df["lon"].to_numpy(), df["lat"].to_numpy())
+    df["lon3857"] = lon3857
+    df["lat3857"] = lat3857
     return df[columns] if columns else df
 
 

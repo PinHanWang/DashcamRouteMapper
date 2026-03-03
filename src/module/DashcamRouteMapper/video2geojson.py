@@ -26,6 +26,9 @@ class Video2GeoJson:
             raise ValueError(
                 f"讀取影片 metadata 失敗，無 GPS 資料：{e}"
             )
+        # 明確報錯：空 DataFrame 表示影片無 GPS 資料，後續 .iloc[] 會 crash
+        if self.df.empty:
+            raise ValueError(f"影片 {video_path.name} 不含 GPS 資料，已跳過")
 
     def create_point_feature(self) -> List[Feature]:
         """從每一筆 GPS 記錄建立 Point Feature 清單"""
@@ -110,7 +113,7 @@ class Video2GeoJson:
         feature_collection = self.create_feature_collection(feature_type)
         output_path = Path(output_dir) / f"{self.video_path.stem}.geojson"
 
-        with open(output_path, "w") as f:
+        with open(output_path, "w", encoding="utf-8") as f:
             geojson.dump(feature_collection, f, indent=2)
 
         logger.info("GeoJSON 已儲存至 %s", output_path)
