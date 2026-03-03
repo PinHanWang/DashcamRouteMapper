@@ -12,7 +12,7 @@ import geojson
 from geojson import Feature, FeatureCollection, LineString, Point
 from geopy.distance import geodesic
 
-from src.module.DashcamRouteMapper.utils.exif import makeExifDf
+from src.module.DashcamRouteMapper.utils.exif import make_exif_df
 
 logger = logging.getLogger(__name__)
 
@@ -21,7 +21,7 @@ class Video2GeoJson:
     def __init__(self, video_path: Path) -> None:
         self.video_path = Path(video_path)
         try:
-            self.df = makeExifDf(video_path, [])
+            self.df = make_exif_df(video_path, None)
         except Exception as e:
             raise ValueError(
                 f"讀取影片 metadata 失敗，無 GPS 資料：{e}"

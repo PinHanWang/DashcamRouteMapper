@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 _wgs84_to_3857 = Transformer.from_crs("EPSG:4326", "EPSG:3857", always_xy=True)
 
 
-def _getDfTransGps(lon: float, lat: float) -> tuple[float, float]:
+def _get_df_trans_gps(lon: float, lat: float) -> tuple[float, float]:
     """WGS84（EPSG:4326）→ Web Mercator（EPSG:3857）座標轉換"""
     return _wgs84_to_3857.transform(lon, lat)
 
@@ -75,7 +75,7 @@ def json_to_csv_with_fields(
                         sec = sec_counter
 
                 # WGS84 → EPSG:3857
-                lon3857, lat3857 = _getDfTransGps(lon, lat)
+                lon3857, lat3857 = _get_df_trans_gps(lon, lat)
 
                 row = {
                     "filename": filename,
