@@ -82,10 +82,10 @@ class DashcamRouteProcessor:
 
 
 def main():
-    dir = Path(r'H:\DCIM\Movie')
-    outptut_dir = Path(r'H:\DCIM\Movie\gjson')
+    dir = Path(r'M:\DCIM\Movie')
+    outptut_dir = Path(r'E:\Peter\DashcamRouteMapper\output\1015')
     processor = DashcamRouteProcessor()
-    processor.process(dir, outptut_dir, feature_type="all")
+    processor.process(dir, outptut_dir, feature_type="point")
 
 if __name__ == "__main__":
     main()

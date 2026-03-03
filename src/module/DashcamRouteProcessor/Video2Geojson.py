@@ -220,9 +220,9 @@ class Video2GeoJson:
 
 
 def main():
-    video_path = Path(r"H:\DCIM\Movie\20250915135613_000034A.MP4")
+    video_path = Path(r"M:\DCIM\Movie\20251015121134_000025A.MP4")
     video2geojson = Video2GeoJson(video_path)
-    video2geojson.save_geojson(output_dir=Path(r"H:\DCIM\Movie\output"), feature_type="all")
+    video2geojson.save_geojson(output_dir=Path(r"H:\DCIM\Movie\output"), feature_type="point")
     stats = video2geojson._get_stats()
     print(stats)
 

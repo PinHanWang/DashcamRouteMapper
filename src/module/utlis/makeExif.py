@@ -5,6 +5,9 @@ from pathlib import Path
 import pandas as pd
 from pyproj import Transformer
 
+# 指定 exiftool 的完整路徑
+EXIFTOOL_PATH = r'C:\Program Files\ExifTool\exiftool.exe'
+
 
 def _getExifStartTime(p: Path) -> tuple[int, str]:
     """
@@ -13,10 +16,14 @@ def _getExifStartTime(p: Path) -> tuple[int, str]:
         檔案創建時間為整個錄影完成後
     """
     fps, startDate = -1, ""
-    cmd = f"exiftool -s {str(p)} -VideoFrameRate -CreateDate -Duration"
+    cmd = f'"{EXIFTOOL_PATH}" -s "{str(p)}" -VideoFrameRate -CreateDate -Duration'
     with os.popen(cmd) as t:
         context = t.read()[:-1]
-        l = [x.split(": ")[1] for x in context.split("\n")]
+        
+        if not context or "'exiftool'" in context:
+            raise RuntimeError("exiftool not found. Please install exiftool and add it to your system PATH.")
+        
+        l = [x.split(":", 1)[1].strip() for x in context.split("\n") if ":" in x]
         fps = float(l[0])
         createDate = datetime.strptime(l[1], "%Y:%m:%d %H:%M:%S")
         if 's' in l[2]:
@@ -49,10 +56,17 @@ def _getExifExtractEmbeddedData(p: Path) -> dict:
         return d * (a + b/60 + c/3600)
 
     data = {}
-    cmd = f"exiftool -ee -T -GPS* {str(p)}"
+    cmd = f'"{EXIFTOOL_PATH}" -ee -T -GPS* "{str(p)}"'
     with os.popen(cmd) as t:
         context = t.read()[:-1]
+        
+        if not context or "'exiftool'" in context:
+            return data
+            
         cells = context.split("\t")[:-1]
+        if len(cells) == 0:
+            return data
+            
         data["GPSDateTime"] = [cells[i][:-1] for i in range(0, len(cells), 5)]
         data["GPSLatitude"] = [_calculateGps(
             cells[i]) for i in range(1, len(cells), 5)]
@@ -127,7 +141,7 @@ def saveExifCsv(df: pd.DataFrame, out: Path) -> None:
 
 if __name__ == '__main__':
     folder = Path(r"H:\DCIM\Movie")
-    name = "20250226112032_000029A.MP4"
+    name = "20251015095509_000004A.MP4"
     file = (folder / name)
 
     print(file)
