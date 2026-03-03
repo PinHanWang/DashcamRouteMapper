@@ -1,14 +1,37 @@
+"""
+GeoJSON → CSV 轉換工具，含 EPSG:3857 座標欄位
+"""
 import json
-import pandas as pd
+import logging
 from pathlib import Path
+
+import pandas as pd
 from pyproj import Transformer
-from datetime import datetime
+
+from src.module.DashcamRouteMapper.config import DEFAULT_FPS
+
+logger = logging.getLogger(__name__)
+
 
 def _getDfTransGps(lon: float, lat: float) -> tuple[float, float]:
+    """WGS84（EPSG:4326）→ Web Mercator（EPSG:3857）座標轉換"""
     transformer = Transformer.from_crs("EPSG:4326", "EPSG:3857", always_xy=True)
     return transformer.transform(lon, lat)
 
-def json_to_csv_with_fields(input_folder: Path, output_folder: Path):
+
+def json_to_csv_with_fields(
+    input_folder: Path,
+    output_folder: Path,
+    fps: int = DEFAULT_FPS,
+) -> None:
+    """
+    將 input_folder 內所有 .geojson 轉換為 CSV，輸出至 output_folder。
+
+    Args:
+        input_folder:  包含 .geojson 的資料夾
+        output_folder: CSV 輸出資料夾
+        fps:           影片 FPS（用於計算 frame 欄位，預設讀自 config.DEFAULT_FPS）
+    """
     output_folder.mkdir(parents=True, exist_ok=True)
 
     for json_file in input_folder.glob("*.geojson"):
@@ -16,18 +39,19 @@ def json_to_csv_with_fields(input_folder: Path, output_folder: Path):
             data = json.load(f)
 
         features = data.get("features", [])
-
         rows = []
         filename = json_file.stem
         starttime = ""
-        sec = 0  # 秒數初始
+        sec = 0  # 影片秒數計數
 
         for feature in features:
-            if feature["geometry"]["type"] == "LineString":
+            geom_type = feature["geometry"]["type"]
+
+            if geom_type == "LineString":
                 starttime = feature["properties"].get("starttime", "")
                 continue
 
-            if feature["geometry"]["type"] == "Point":
+            if geom_type == "Point":
                 props = feature["properties"]
                 coords = feature["geometry"]["coordinates"]
                 lon, lat = coords
@@ -36,7 +60,7 @@ def json_to_csv_with_fields(input_folder: Path, output_folder: Path):
                 azimuth = props.get("azimuth", "")
                 dt = props.get("datetime", "")
 
-                # WGS84 to EPSG:3857
+                # WGS84 → EPSG:3857
                 lon3857, lat3857 = _getDfTransGps(lon, lat)
 
                 row = {
@@ -47,33 +71,30 @@ def json_to_csv_with_fields(input_folder: Path, output_folder: Path):
                     "lon": lon,
                     "speed": speed,
                     "azimuth": azimuth,
-                    "fps": 60,
+                    "fps": fps,
                     "sec": sec,
-                    "frame": sec * 60,
+                    "frame": sec * fps,   # 修正：使用 fps 變數，而非硬編碼 60
                     "lon3857": lon3857,
-                    "lat3857": lat3857
+                    "lat3857": lat3857,
                 }
-
                 rows.append(row)
-                sec += 1  # 下一秒
+                sec += 1
 
         df = pd.DataFrame(rows)
 
-        # 調整時間格式
         if not df.empty:
             df["datetime"] = pd.to_datetime(df["datetime"], errors="coerce")
             df["datetime"] = df["datetime"].dt.strftime("%Y:%m:%d %H:%M:%S")
 
         output_path = output_folder / f"{filename}.csv"
         df.to_csv(output_path, index=False, encoding="utf-8-sig")
-        print(f"已輸出: {output_path}")
+        logger.info("已輸出：%s", output_path)
+        print(f"已輸出：{output_path}")
 
-# 範例用法：
-# json_to_csv_with_fields(Path("input/json_folder"), Path("output/csv_folder"))
 
-# 範例執行（你可以改成你自己的路徑）
 if __name__ == "__main__":
-    json_to_csv_with_fields(
-        input_folder=Path(r"output\20250408"),    # 替換為你的 JSON 資料夾路徑
-        output_folder=Path(r"output\20250408")    # 替換為輸出 CSV 的資料夾
-    )
+    import sys
+
+    input_dir = Path(sys.argv[1]) if len(sys.argv) > 1 else Path("output/20250408")
+    output_dir = Path(sys.argv[2]) if len(sys.argv) > 2 else input_dir
+    json_to_csv_with_fields(input_dir, output_dir)
