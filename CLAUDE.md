@@ -12,12 +12,13 @@ DashcamRouteMapper 從行車記錄器影片提取嵌入式 GPS 資料，輸出 G
 src/module/DashcamRouteMapper/
 ├── __init__.py
 ├── config.py            # 集中設定：EXIFTOOL_PATH、DEFAULT_FPS、預設路徑
-├── main.py              # 批次處理入口（argparse CLI）
+├── main.py              # 批次處理入口（argparse CLI，ThreadPoolExecutor 平行處理）
 ├── video2geojson.py     # 核心轉換：Video2GeoJson 類別
 └── utils/
     ├── __init__.py
-    ├── exif.py          # exiftool 呼叫、EXIF GPS 資料解析
-    ├── gps_processor.py # GPX 讀取、線性插值、Folium 視覺化
+    ├── exif.py          # exiftool 呼叫（subprocess）、EXIF GPS 資料解析
+    ├── geo.py           # 共用地理工具：座標轉換（EPSG:4326→3857）、Haversine 距離
+    ├── gps_processor.py # GPX 讀取、線性插值、Folium 視覺化（PolyLine + FastMarkerCluster）
     └── json2csv.py      # GeoJSON → CSV（含 EPSG:3857 座標轉換）
 ```
 
@@ -43,8 +44,8 @@ pip install -r requirements.txt
 # 使用預設路徑
 python -m src.module.DashcamRouteMapper.main
 
-# 指定路徑
-python -m src.module.DashcamRouteMapper.main --input M:/DCIM/Movie --output E:/output
+# 指定路徑（4 個 worker 平行處理）
+python -m src.module.DashcamRouteMapper.main --input M:/DCIM/Movie --output E:/output --workers 4
 
 # 查看所有選項
 python -m src.module.DashcamRouteMapper.main --help
@@ -77,6 +78,14 @@ python -m src.module.DashcamRouteMapper.utils.json2csv [input_folder] [output_fo
 - `EXIFTOOL_PATH`：exiftool 執行檔路徑
 - `DEFAULT_FPS`：FPS fallback 值（目前 30）
 - `DEFAULT_INPUT_DIR` / `DEFAULT_OUTPUT_DIR`：預設路徑
+
+## 效能設計重點
+
+- **平行處理**：`main.py` 使用 `ThreadPoolExecutor`，exiftool 為 I/O 密集操作，多 thread 可大幅縮短批次時間（CLI `--workers` 控制，預設 4）
+- **座標轉換集中**：`utils/geo.py` 持有唯一一個 `pyproj.Transformer` 實例，`exif.py` 與 `json2csv.py` 皆從此引入，避免重複初始化
+- **向量化距離計算**：`geo.haversine_total_distance()` 用 numpy 一次計算全段距離，取代逐點 `geopy.geodesic()`
+- **避免 iterrows()**：`video2geojson.create_point_feature()` 改用 `zip` 迭代 Series，避免 pandas 每列建立 Series 物件的額外開銷
+- **exiftool 呼叫**：改用 `subprocess.run()`（含 returncode/stderr），可精確區分「exiftool 未安裝」vs「無 GPS 資料」
 
 ## 資料目錄
 
