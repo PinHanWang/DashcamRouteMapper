@@ -2,19 +2,28 @@
 行車記錄器影片 → GeoJSON 轉換核心模組
 """
 import logging
-import os
 import re
 from datetime import datetime
 from pathlib import Path
-from typing import List, Tuple
+from typing import List
 
+import numpy as np
+import pandas as pd
 import geojson
 from geojson import Feature, FeatureCollection, LineString, Point
-from geopy.distance import geodesic
 
 from src.module.DashcamRouteMapper.utils.exif import make_exif_df
+from src.module.DashcamRouteMapper.utils.geo import haversine_total_distance
 
 logger = logging.getLogger(__name__)
+
+# 行車記錄器 EXIF 日期格式（YYYY:MM:DD）→ ISO 格式（YYYY-MM-DD）
+_EXIF_DATE_RE = re.compile(r"(\d{4}):(\d{2}):(\d{2})")
+
+
+def _exif_to_iso(dt_str: str) -> str:
+    """將 EXIF 日期格式轉為 ISO 8601，例如 '2024:01:15 10:30:00' → '2024-01-15 10:30:00'"""
+    return _EXIF_DATE_RE.sub(r"\1-\2-\3", dt_str)
 
 
 class Video2GeoJson:
@@ -31,38 +40,43 @@ class Video2GeoJson:
             raise ValueError(f"影片 {video_path.name} 不含 GPS 資料，已跳過")
 
     def create_point_feature(self) -> List[Feature]:
-        """從每一筆 GPS 記錄建立 Point Feature 清單"""
-        point_features = []  # 修正 typo：point_feartures → point_features
-        for _, row in self.df.iterrows():
-            point = Point((row["lon"], row["lat"]))
-            datetime_str = re.sub(
-                r"(\d{4}):(\d{2}):(\d{2})", r"\1-\2-\3", row["datetime"]
-            )
-            dt_obj = datetime.strptime(datetime_str, "%Y-%m-%d %H:%M:%S")
-            properties = {
-                "datetime": dt_obj.isoformat() + "Z",   # 修正：恢復完整屬性
-                "timestamp": int(dt_obj.timestamp()),
-                "speed": row.get("speed", ""),
-                "azimuth": row.get("azimuth", ""),
-            }
-            point_feature = Feature(geometry=point, properties=properties)
-            point_features.append(point_feature)
+        """
+        從每一筆 GPS 記錄建立 Point Feature 清單。
+        使用 zip 迭代 Series 取代 iterrows()，避免每列建立 pandas Series 的額外開銷。
+        """
+        # 批次轉換 datetime 字串，一次處理整欄
+        dt_series = pd.to_datetime(
+            self.df["datetime"].str.replace(_EXIF_DATE_RE, r"\1-\2-\3", regex=True)
+        )
+        speeds = self.df["speed"] if "speed" in self.df.columns else [""] * len(self.df)
+        azimuths = self.df["azimuth"] if "azimuth" in self.df.columns else [""] * len(self.df)
 
-        return point_features
+        return [
+            Feature(
+                geometry=Point((lon, lat)),
+                properties={
+                    "datetime": dt.isoformat() + "Z",
+                    "timestamp": int(dt.timestamp()),
+                    "speed": speed,
+                    "azimuth": azimuth,
+                },
+            )
+            for lon, lat, dt, speed, azimuth in zip(
+                self.df["lon"], self.df["lat"], dt_series, speeds, azimuths
+            )
+        ]
 
     def create_line_feature(self) -> Feature:
         """從所有 GPS 記錄建立 LineString Feature"""
-        line_coordinates = list(zip(self.df["lon"], self.df["lat"]))
+        lons = self.df["lon"].to_numpy()
+        lats = self.df["lat"].to_numpy()
+        line_coordinates = list(zip(lons, lats))
 
-        total_distance = self._calculate_distance(line_coordinates)  # 修正：統一使用私有方法
-        starttime_str = re.sub(
-            r"(\d{4}):(\d{2}):(\d{2})", r"\1-\2-\3", self.df["datetime"].iloc[0]
-        )
-        endtime_str = re.sub(
-            r"(\d{4}):(\d{2}):(\d{2})", r"\1-\2-\3", self.df["datetime"].iloc[-1]
-        )
-        starttime_obj = datetime.strptime(starttime_str, "%Y-%m-%d %H:%M:%S")
-        endtime_obj = datetime.strptime(endtime_str, "%Y-%m-%d %H:%M:%S")
+        # 向量化 Haversine 距離（取代逐點 geopy.geodesic）
+        total_distance = haversine_total_distance(lons, lats)
+
+        starttime_obj = datetime.strptime(_exif_to_iso(self.df["datetime"].iloc[0]), "%Y-%m-%d %H:%M:%S")
+        endtime_obj = datetime.strptime(_exif_to_iso(self.df["datetime"].iloc[-1]), "%Y-%m-%d %H:%M:%S")
         line_properties = {
             "filename": self.df["filename"].iloc[0],
             "starttime": starttime_obj.isoformat(),
@@ -108,32 +122,23 @@ class Video2GeoJson:
 
     def save_geojson(self, output_dir: Path, feature_type: str = "all") -> None:
         """將轉換結果儲存為 GeoJSON 檔案"""
-        os.makedirs(output_dir, exist_ok=True)
+        output_dir = Path(output_dir)
+        output_dir.mkdir(parents=True, exist_ok=True)
 
         feature_collection = self.create_feature_collection(feature_type)
-        output_path = Path(output_dir) / f"{self.video_path.stem}.geojson"
+        output_path = output_dir / f"{self.video_path.stem}.geojson"
 
         with open(output_path, "w", encoding="utf-8") as f:
             geojson.dump(feature_collection, f, indent=2)
 
         logger.info("GeoJSON 已儲存至 %s", output_path)
 
-    def _calculate_distance(self, coordinates: List[Tuple[float, float]]) -> float:
-        """計算軌跡總長度（公尺），座標格式為 (lon, lat)"""
+    def _calculate_distance(self, coordinates: List[tuple]) -> float:
+        """計算軌跡總長度（公尺），向量化 Haversine（取代逐點 geopy.geodesic）"""
         if len(coordinates) < 2:
             return 0.0
-
-        total_distance = 0.0
-        for i in range(len(coordinates) - 1):
-            point1 = (coordinates[i][1], coordinates[i][0])      # (lat, lon)
-            point2 = (coordinates[i + 1][1], coordinates[i + 1][0])
-            try:
-                total_distance += geodesic(point1, point2).meters
-            except Exception as e:
-                logger.warning("geodesic 計算失敗（點 %d）：%s", i, e)
-                continue
-
-        return total_distance
+        coords = np.array(coordinates)
+        return haversine_total_distance(coords[:, 0], coords[:, 1])
 
     def _get_stats(self) -> dict:
         """傳回軌跡統計資訊"""
@@ -146,14 +151,14 @@ class Video2GeoJson:
                 datetime.strptime(stats['End_time'], "%Y:%m:%d %H:%M:%S")
                 - datetime.strptime(stats['Start_time'], "%Y:%m:%d %H:%M:%S")
             ).total_seconds()
-            stats['Total_distance_m'] = self._calculate_distance(
-                list(zip(self.df["lon"], self.df["lat"]))
-            )
+            lons = self.df["lon"].to_numpy()
+            lats = self.df["lat"].to_numpy()
+            stats['Total_distance_m'] = haversine_total_distance(lons, lats)
             stats['Boundary'] = {
-                'min_lon': self.df['lon'].min(),
-                'max_lon': self.df['lon'].max(),
-                'min_lat': self.df['lat'].min(),
-                'max_lat': self.df['lat'].max(),
+                'min_lon': float(lons.min()),
+                'max_lon': float(lons.max()),
+                'min_lat': float(lats.min()),
+                'max_lat': float(lats.max()),
             }
         except Exception as e:
             logger.error("計算統計資訊失敗：%s", e)

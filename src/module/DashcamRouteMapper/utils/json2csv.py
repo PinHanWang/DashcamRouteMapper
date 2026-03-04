@@ -7,19 +7,11 @@ from datetime import datetime
 from pathlib import Path
 
 import pandas as pd
-from pyproj import Transformer
 
 from src.module.DashcamRouteMapper.config import DEFAULT_FPS
+from src.module.DashcamRouteMapper.utils.geo import transform_wgs84_to_3857
 
 logger = logging.getLogger(__name__)
-
-# 模組層級建立一次，避免每筆座標重建（效能修正）
-_wgs84_to_3857 = Transformer.from_crs("EPSG:4326", "EPSG:3857", always_xy=True)
-
-
-def _get_df_trans_gps(lon: float, lat: float) -> tuple[float, float]:
-    """WGS84（EPSG:4326）→ Web Mercator（EPSG:3857）座標轉換"""
-    return _wgs84_to_3857.transform(lon, lat)
 
 
 def json_to_csv_with_fields(
@@ -74,8 +66,8 @@ def json_to_csv_with_fields(
                     except Exception:
                         sec = sec_counter
 
-                # WGS84 → EPSG:3857
-                lon3857, lat3857 = _get_df_trans_gps(lon, lat)
+                # WGS84 → EPSG:3857（使用共用 geo 工具）
+                lon3857, lat3857 = transform_wgs84_to_3857(lon, lat)
 
                 row = {
                     "filename": filename,

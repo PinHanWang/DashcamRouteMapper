@@ -78,24 +78,28 @@ class GPXProcessor:
     def draw_tracking(self, track_pts: list[dict], output_file: str) -> None:
         """
         將軌跡點繪製成 Folium HTML 地圖並存檔。
+
+        使用 PolyLine 繪製路線 + FastMarkerCluster 聚合標記，
+        取代逐點 Marker，大量 GPS 點時 HTML 大小與瀏覽器渲染速度顯著改善。
+
         output_file 為必填，例如 'output/tracking.html'
         """
         if not track_pts:
             logger.warning("軌跡點為空，略過地圖繪製")
             return
 
-        m = folium.Map(
-            location=[track_pts[0]['lat'], track_pts[0]['lon']],
-            zoom_start=12,
-        )
-        for point in track_pts:
-            folium.Marker(
-                location=[point['lat'], point['lon']],
-                popup=str(point['time']),
-            ).add_to(m)
+        from folium.plugins import FastMarkerCluster
+
+        coords = [[p['lat'], p['lon']] for p in track_pts]
+
+        m = folium.Map(location=coords[0], zoom_start=12)
+        # 軌跡線
+        folium.PolyLine(coords, color="blue", weight=2.5, opacity=0.8).add_to(m)
+        # 聚合標記（點數多時自動分群，避免瀏覽器渲染過慢）
+        FastMarkerCluster(coords).add_to(m)
 
         m.save(output_file)
-        logger.info("地圖已儲存至 %s", output_file)
+        logger.info("地圖已儲存至 %s（%d 點）", output_file, len(track_pts))
 
 
 if __name__ == "__main__":

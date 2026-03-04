@@ -7,19 +7,20 @@ DashcamRouteMapper 批次處理入口
     # 使用 config.py 預設路徑
     python -m src.module.DashcamRouteMapper.main
 
-    # 指定路徑
+    # 指定路徑（4 個 worker 平行處理）
     python -m src.module.DashcamRouteMapper.main \\
         --input M:/DCIM/Movie \\
         --output E:/output/1015 \\
-        --type point
+        --type point \\
+        --workers 4
 """
 import argparse
 import datetime
-import glob
 import logging
 import os
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
-from typing import List
+from typing import List, Optional
 
 import geojson
 from tqdm import tqdm
@@ -41,6 +42,7 @@ class DashcamRouteProcessor:
         video_dir: Path,
         output_dir: Path,
         feature_type: str = "point",
+        max_workers: int = 4,
     ) -> None:
         """
         掃描 video_dir 下所有影片，轉換為 GeoJSON 後合併輸出至 output_dir。
@@ -49,6 +51,7 @@ class DashcamRouteProcessor:
             video_dir:    輸入影片資料夾
             output_dir:   GeoJSON 輸出資料夾
             feature_type: 'all' | 'point' | 'line'
+            max_workers:  平行處理的 thread 數量
         """
         os.makedirs(output_dir, exist_ok=True)
 
@@ -60,36 +63,55 @@ class DashcamRouteProcessor:
             if not video_files:
                 raise ValueError(f"在 {video_dir} 找不到任何影片檔案")
 
-            self.convert_video_to_geojson(video_files, output_dir, feature_type)
+            self.convert_video_to_geojson(video_files, output_dir, feature_type, max_workers)
             self.merge_all_geojson(output_dir)
         except Exception as e:
             logger.error("批次處理失敗：%s", e)
 
     def _find_video_files(self, video_dir: Path) -> List[Path]:
-        """遞迴尋找目錄下所有影片檔案"""
-        video_extensions = ['*.mp4', '*.MP4', '*.mov', '*.MOV', '*.avi', '*.AVI']
-        video_files = []
-        for ext in video_extensions:
-            pattern = str(video_dir / "**" / ext)
-            found = glob.glob(pattern, recursive=True)
-            video_files.extend(found)
-        return list(set(Path(f) for f in video_files))
+        """遞迴尋找目錄下所有影片檔案（大小寫不敏感去重）"""
+        found = set()
+        result = []
+        for p in video_dir.rglob("*"):
+            if p.suffix.lower() in {".mp4", ".mov", ".avi"} and p.stat().st_size > 0:
+                # 用 resolve() 規範化路徑，避免大小寫重複
+                canonical = p.resolve()
+                if canonical not in found:
+                    found.add(canonical)
+                    result.append(p)
+        return result
 
     def convert_video_to_geojson(
         self,
         video_files: List[Path],
         output_dir: Path,
         feature_type: str = "all",
+        max_workers: int = 4,
     ) -> None:
-        """逐一轉換影片為 GeoJSON"""
+        """
+        平行轉換影片為 GeoJSON（ThreadPoolExecutor）。
+        exiftool 呼叫為 I/O 密集，多 thread 可有效縮短整體等待時間。
+        """
         os.makedirs(output_dir, exist_ok=True)
 
-        for video_file in tqdm(video_files, desc="轉換影片 → GeoJSON"):
+        def _convert_one(video_file: Path) -> tuple[Path, Optional[Exception]]:
             try:
                 converter = Video2GeoJson(video_file)
                 converter.save_geojson(output_dir=output_dir, feature_type=feature_type)
+                return video_file, None
             except Exception as e:
-                logger.warning("處理 %s 失敗：%s", video_file, e)
+                return video_file, e
+
+        with ThreadPoolExecutor(max_workers=max_workers) as executor:
+            futures = {executor.submit(_convert_one, f): f for f in video_files}
+            for future in tqdm(
+                as_completed(futures),
+                total=len(futures),
+                desc=f"轉換影片 → GeoJSON（{max_workers} workers）",
+            ):
+                video_file, error = future.result()
+                if error:
+                    logger.warning("處理 %s 失敗：%s", video_file, error)
 
     def merge_all_geojson(self, directory: Path) -> None:
         """
@@ -145,6 +167,12 @@ def _parse_args() -> argparse.Namespace:
         default="point",
         help="GeoJSON Feature 類型",
     )
+    parser.add_argument(
+        "--workers", "-w",
+        type=int,
+        default=4,
+        help="平行處理的 thread 數量（建議設為 CPU 核心數）",
+    )
     return parser.parse_args()
 
 
@@ -153,12 +181,14 @@ def main() -> None:
     logger.info("輸入：%s", args.input)
     logger.info("輸出：%s", args.output)
     logger.info("類型：%s", args.type)
+    logger.info("Workers：%s", args.workers)
 
     processor = DashcamRouteProcessor()
     processor.process(
         video_dir=args.input,
         output_dir=args.output,
         feature_type=args.type,
+        max_workers=args.workers,
     )
 
 
