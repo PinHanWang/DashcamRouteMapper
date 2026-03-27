@@ -30,7 +30,7 @@ class DashcamRouteProcessor:
             print(f"Error processing videos directory: {e}")
 
     def _find_video_files(self, video_dir: Path) -> List[Path]:
-        video_extensions = ['*.mp4', '*.MP4', '*.mov', '*.MOV', '*.avi', '*.AVI']
+        video_extensions = ['*.mp4', '*.MP4', '*.mov', '*.MOV', '*.avi', '*.AVI','*.ts', '*.TS']
         video_files = []
         
         for ext in video_extensions:
@@ -82,8 +82,8 @@ class DashcamRouteProcessor:
 
 
 def main():
-    dir = Path(r'M:\DCIM\Movie')
-    outptut_dir = Path(r'E:\Peter\DashcamRouteMapper\output\1015')
+    dir = Path(r'J:\DCIM\Movie')
+    outptut_dir = Path(r'E:\Peter\DashcamRouteMapper\output\20260326')
     processor = DashcamRouteProcessor()
     processor.process(dir, outptut_dir, feature_type="point")
 

@@ -1,0 +1,265 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [121.5170, 25.0478, 10]
+      },
+      "properties": {
+        "time": "2024-11-21T01:00:00Z",
+        "accuracy": 10,
+        "speed": 0,
+        "battery": 100
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [121.5172, 25.0476, 11]
+      },
+      "properties": {
+        "time": "2024-11-21T01:01:00Z",
+        "accuracy": 10,
+        "speed": 8.3,
+        "battery": 99
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [121.5174, 25.0474, 12]
+      },
+      "properties": {
+        "time": "2024-11-21T01:02:00Z",
+        "accuracy": 10,
+        "speed": 10.5,
+        "battery": 99
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [121.5176, 25.0470, 13]
+      },
+      "properties": {
+        "time": "2024-11-21T01:03:00Z",
+        "accuracy": 10,
+        "speed": 12.8,
+        "battery": 98
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [121.5180, 25.0465, 14]
+      },
+      "properties": {
+        "time": "2024-11-21T01:04:00Z",
+        "accuracy": 10,
+        "speed": 15.2,
+        "battery": 98
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [121.5185, 25.0460, 15]
+      },
+      "properties": {
+        "time": "2024-11-21T01:05:00Z",
+        "accuracy": 10,
+        "speed": 13.9,
+        "battery": 97
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [121.5190, 25.0455, 16]
+      },
+      "properties": {
+        "time": "2024-11-21T01:06:00Z",
+        "accuracy": 10,
+        "speed": 11.1,
+        "battery": 97
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [121.5195, 25.0450, 17]
+      },
+      "properties": {
+        "time": "2024-11-21T01:07:00Z",
+        "accuracy": 10,
+        "speed": 9.7,
+        "battery": 96
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [121.5200, 25.0445, 18]
+      },
+      "properties": {
+        "time": "2024-11-21T01:08:00Z",
+        "accuracy": 10,
+        "speed": 8.3,
+        "battery": 96
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [121.5205, 25.0440, 19]
+      },
+      "properties": {
+        "time": "2024-11-21T01:09:00Z",
+        "accuracy": 10,
+        "speed": 7.5,
+        "battery": 95
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [121.5210, 25.0435, 20]
+      },
+      "properties": {
+        "time": "2024-11-21T01:10:00Z",
+        "accuracy": 10,
+        "speed": 6.9,
+        "battery": 95
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [121.5215, 25.0430, 21]
+      },
+      "properties": {
+        "time": "2024-11-21T01:11:00Z",
+        "accuracy": 10,
+        "speed": 8.3,
+        "battery": 94
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [121.5220, 25.0425, 22]
+      },
+      "properties": {
+        "time": "2024-11-21T01:12:00Z",
+        "accuracy": 10,
+        "speed": 10.5,
+        "battery": 94
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [121.5225, 25.0420, 23]
+      },
+      "properties": {
+        "time": "2024-11-21T01:13:00Z",
+        "accuracy": 10,
+        "speed": 12.8,
+        "battery": 93
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [121.5230, 25.0415, 24]
+      },
+      "properties": {
+        "time": "2024-11-21T01:14:00Z",
+        "accuracy": 10,
+        "speed": 14.2,
+        "battery": 93
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [121.5235, 25.0410, 25]
+      },
+      "properties": {
+        "time": "2024-11-21T01:15:00Z",
+        "accuracy": 10,
+        "speed": 13.9,
+        "battery": 92
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [121.5240, 25.0405, 26]
+      },
+      "properties": {
+        "time": "2024-11-21T01:16:00Z",
+        "accuracy": 10,
+        "speed": 11.1,
+        "battery": 92
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [121.5245, 25.0400, 27]
+      },
+      "properties": {
+        "time": "2024-11-21T01:17:00Z",
+        "accuracy": 10,
+        "speed": 9.7,
+        "battery": 91
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [121.5250, 25.0395, 28]
+      },
+      "properties": {
+        "time": "2024-11-21T01:18:00Z",
+        "accuracy": 10,
+        "speed": 8.3,
+        "battery": 91
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [121.5255, 25.0390, 29]
+      },
+      "properties": {
+        "time": "2024-11-21T01:19:00Z",
+        "accuracy": 10,
+        "speed": 0,
+        "battery": 90
+      }
+    }
+  ]
+}
