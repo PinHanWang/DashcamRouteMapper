@@ -202,7 +202,7 @@ class DashcamRouteProcessor:
         combined = geojson.FeatureCollection(all_features)
         merged_dir = directory / "merged"
         merged_dir.mkdir(exist_ok=True)
-        timestamp = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
+        timestamp = datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%d_%H%M%S')
         merged_path = merged_dir / f"{timestamp}.geojson"
 
         try:
