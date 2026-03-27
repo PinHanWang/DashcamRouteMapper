@@ -85,7 +85,7 @@ def _run_upload(merged_path: Path) -> None:
         with DawarichUploader(cfg) as uploader:
             uploader.upload_trajectory(points)
     except Exception as e:
-        logger.error("上傳失敗：%s", e)
+        logger.exception("上傳失敗：%s", e)
 
 
 class DashcamRouteProcessor:
@@ -178,14 +178,26 @@ class DashcamRouteProcessor:
         # 只掃描 directory 頂層的 .geojson（個別影片輸出），不遞迴避免納入舊合併檔
         gjson_files = list(directory.glob("*.geojson"))
 
+        if not gjson_files:
+            logger.warning("在 %s 找不到任何 GeoJSON 檔案，略過合併", directory)
+            return None
+
         all_features = []
         for gjson_file in gjson_files:
             try:
                 with open(gjson_file, "r", encoding="utf-8") as f:
                     data = geojson.load(f)
-                    all_features.extend(data["features"])
+                    features = data.get("features")
+                    if features is None:
+                        logger.warning("%s 缺少 'features' 欄位，已跳過", gjson_file)
+                        continue
+                    all_features.extend(features)
             except Exception as e:
                 logger.warning("讀取 %s 失敗：%s", gjson_file, e)
+
+        if not all_features:
+            logger.warning("合併後無有效 features，略過輸出")
+            return None
 
         combined = geojson.FeatureCollection(all_features)
         merged_dir = directory / "merged"
