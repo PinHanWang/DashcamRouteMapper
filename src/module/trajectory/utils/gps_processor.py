@@ -2,7 +2,7 @@
 GPX 軌跡讀取、插值與 Folium 視覺化
 """
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 import os
 
 import gpxpy
@@ -62,7 +62,7 @@ class GPXProcessor:
         lon_interp = interp1d(time, lon, kind='linear')
         ele_interp = interp1d(time, ele, kind='linear')
 
-        new_datetimes = [datetime.fromtimestamp(t) for t in new_times]
+        new_datetimes = [datetime.fromtimestamp(t, tz=timezone.utc) for t in new_times]
         new_lats = lat_interp(new_times)
         new_lons = lon_interp(new_times)
         new_eles = ele_interp(new_times)

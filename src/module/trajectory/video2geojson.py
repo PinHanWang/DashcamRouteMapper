@@ -12,8 +12,8 @@ import pandas as pd
 import geojson
 from geojson import Feature, FeatureCollection, LineString, Point
 
-from src.module.DashcamRouteMapper.utils.exif import make_exif_df
-from src.module.DashcamRouteMapper.utils.geo import haversine_total_distance
+from src.module.trajectory.utils.exif import make_exif_df
+from src.module.trajectory.utils.geo import haversine_total_distance
 
 logger = logging.getLogger(__name__)
 
@@ -132,13 +132,6 @@ class Video2GeoJson:
             geojson.dump(feature_collection, f, indent=2)
 
         logger.info("GeoJSON 已儲存至 %s", output_path)
-
-    def _calculate_distance(self, coordinates: List[tuple]) -> float:
-        """計算軌跡總長度（公尺），向量化 Haversine（取代逐點 geopy.geodesic）"""
-        if len(coordinates) < 2:
-            return 0.0
-        coords = np.array(coordinates)
-        return haversine_total_distance(coords[:, 0], coords[:, 1])
 
     def _get_stats(self) -> dict:
         """傳回軌跡統計資訊"""

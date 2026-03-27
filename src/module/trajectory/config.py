@@ -31,7 +31,7 @@ DEFAULT_FPS: int = 30
 
 # ── 預設輸入 / 輸出路徑 ────────────────────────────────────────────────────────
 # 相對於專案根目錄（DashcamRouteMapper/）
-_MODULE_DIR = Path(__file__).parent          # src/module/DashcamRouteMapper/
+_MODULE_DIR = Path(__file__).parent          # src/module/trajectory/
 PROJECT_ROOT = _MODULE_DIR.parent.parent.parent  # DashcamRouteMapper/
 
 DEFAULT_INPUT_DIR: Path = PROJECT_ROOT / "data" / "raw"

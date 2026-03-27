@@ -9,8 +9,8 @@ from pathlib import Path
 
 import pandas as pd
 
-from src.module.DashcamRouteMapper.config import EXIFTOOL_PATH
-from src.module.DashcamRouteMapper.utils.geo import transform_array_wgs84_to_3857
+from src.module.trajectory.config import EXIFTOOL_PATH
+from src.module.trajectory.utils.geo import transform_array_wgs84_to_3857
 
 logger = logging.getLogger(__name__)
 
@@ -126,10 +126,14 @@ def make_exif_df(p: Path, columns: list | None = None) -> pd.DataFrame:
         "GPSSpeed": "speed",
         "GPSTrack": "azimuth",
     })
-    fps, start_date = _get_exif_start_time(p)
     df.drop_duplicates(inplace=True)
+
+    # 修復：在呼叫 _get_exif_start_time 之前檢查 DataFrame 是否為空
+    # 避免無 GPS 資料的影片被多次呼叫 exiftool
     if df.empty:
         return df
+
+    fps, start_date = _get_exif_start_time(p)
 
     df["filename"] = p.stem
     df["starttime"] = start_date

@@ -8,8 +8,8 @@ from pathlib import Path
 
 import pandas as pd
 
-from src.module.DashcamRouteMapper.config import DEFAULT_FPS
-from src.module.DashcamRouteMapper.utils.geo import transform_wgs84_to_3857
+from src.module.trajectory.config import DEFAULT_FPS
+from src.module.trajectory.utils.geo import transform_wgs84_to_3857
 
 logger = logging.getLogger(__name__)
 
